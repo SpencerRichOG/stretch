@@ -1,0 +1,25 @@
+{
+  "_note": "SAMPLE DATA. Invented merchants and amounts for testing scripts/tally.py. Not a real student, not real receipts.",
+  "month": "2026-10",
+  "transactions": [
+    {"date": "2026-10-01", "time": "12:05", "merchant": "DemoMusic", "merchant_type": "music streaming", "category": "subscriptions", "amount": 12.99},
+    {"date": "2026-10-02", "time": "23:40", "merchant": "ExampleEats", "merchant_type": "food delivery app", "category": "food delivery", "amount": 21.75},
+    {"date": "2026-10-03", "time": "18:20", "merchant": "DemoMart", "merchant_type": "grocery store", "category": "groceries", "amount": 34.60},
+    {"date": "2026-10-04", "time": "00:55", "merchant": "ExampleEats", "merchant_type": "food delivery app", "category": "food delivery", "amount": 18.40},
+    {"date": "2026-10-05", "merchant": "SampleChat", "merchant_type": "AI chatbot", "category": "subscriptions", "amount": 20.00},
+    {"date": "2026-10-07", "time": "13:10", "merchant": "SampleBurrito", "merchant_type": "restaurant", "category": "dining out", "amount": 11.25},
+    {"date": "2026-10-09", "time": "22:30", "merchant": "ExampleEats", "merchant_type": "food delivery app", "category": "food delivery", "amount": 24.10},
+    {"date": "2026-10-10", "time": "17:45", "merchant": "SampleRide", "merchant_type": "rideshare", "category": "transport", "amount": 14.80},
+    {"date": "2026-10-11", "time": "19:15", "merchant": "DemoMart", "merchant_type": "grocery store", "category": "groceries", "amount": 41.20},
+    {"date": "2026-10-12", "merchant": "DemoFit", "merchant_type": "gym", "category": "health", "amount": 30.00},
+    {"date": "2026-10-14", "time": "20:05", "merchant": "ExampleEats", "merchant_type": "food delivery app", "category": "food delivery", "amount": 16.95},
+    {"date": "2026-10-16", "time": "23:10", "merchant": "ExampleEats", "merchant_type": "food delivery app", "category": "food delivery", "amount": 19.30},
+    {"date": "2026-10-18", "time": "11:30", "merchant": "DemoMart", "merchant_type": "grocery store", "category": "groceries", "amount": 28.45},
+    {"date": "2026-10-20", "merchant": "ExampleEats", "merchant_type": "food delivery app", "category": "food delivery", "amount": 22.60},
+    {"date": "2026-10-21", "time": "01:20", "merchant": "ExampleEats", "merchant_type": "food delivery app", "category": "food delivery", "amount": 17.85},
+    {"date": "2026-10-23", "time": "16:40", "merchant": "SampleRide", "merchant_type": "rideshare", "category": "transport", "amount": 12.30},
+    {"date": "2026-09-29", "time": "21:00", "merchant": "DemoMart", "merchant_type": "grocery store", "category": "groceries", "amount": 25.00}
+  ],
+  "last_month": {"month": "2026-09", "totals": {"food delivery": 72.40, "groceries": 140.10, "subscriptions": 32.99, "dining out": 30.50, "transport": 14.80, "health": 30.00}},
+  "money_map": {"food delivery": 60, "groceries": 160, "subscriptions": 33, "dining out": 30, "transport": 30, "health": 30}
+}
