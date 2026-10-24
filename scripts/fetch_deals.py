@@ -187,11 +187,6 @@ def deals_from_items(item_name, raw_items, wanted_stores, today, offset_hours, t
                 unit = "each"
             if base_unit == "can" and unit in ("oz", "floz", "g") and size <= 30:
                 size, unit = 1.0, "can"  # one standard can, priced by the can like the library
-        if unit != base_unit and rule.get("fallback") and rule["fallback"][1] == base_unit:
-            try:
-                convert(size, unit, base_unit)
-            except StretchError:
-                size, unit = rule["fallback"]  # a 24 oz jar of a by-the-jar item is one jar
         try:
             amount_in_base = convert(size, unit, base_unit)
         except StretchError:

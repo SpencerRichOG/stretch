@@ -10,7 +10,6 @@ A scheduled check-in, run as a background task, that ends in one message. It als
    - Exit 0 with zero deals for the saved stores: rerun once without `--stores` to see every store near the ZIP. If another store has better prices, mention it in one line, but plan with the student's own stores unless they say otherwise.
    - Exit 5 (the ad service could not be reached): fall back to the old way. For each saved store, search the web for its current weekly ad near the student's ZIP, open it, and record only prices you actually read, for items in the recipe library (the keys of `assets/typical_prices.json`). Write them to `deals.json` (format below). If a store's ad cannot be read, skip it, use typical prices, and say so in the message.
    - Some prices need the store's loyalty card or a digital coupon (the output says "with card" or "with coupon"). Say so in a few words when you quote one.
-   - Then get real shelf prices: run `target_prices.py` with the same ZIP, date and `--out`. It adds today's shelf or sale price at the nearest Target for every library item it can match, so most lines are real prices instead of estimates. The plan picks the cheaper of the Target price and any weekly-ad deal for each item, and names the store. On exit 5, go on with ad prices.
 3. Write `profile.json` from memory (see `references/onboarding.md`), then run `plan_meals.py` with the student's local date (see "Running the scripts" in SKILL.md). Use `--json` once so you also have `home_cost_per_meal` for the gear ranking.
 4. Handle the exit code as SKILL.md describes.
 5. Send one message (format below).
@@ -50,7 +49,7 @@ Reply 1 build cart, 2 edit, 3 skip.
 
 - Include the swap idea only if the script returned one.
 - Mention the delivery comparison only if the student has a delivery habit, and only as one short line.
-- If some items are estimates, add "a few prices are estimates" in one short line. When every line has a real store price, say "all real store prices today" instead. If the plan mixes stores (Target and a Fry's deal), name both in the deals line.
+- If some items are estimates, add "a few prices are estimates" in one short line.
 - The full shopping list is not in the first message. Send it when the student replies 2 or asks for it, as plain lines.
 
 ## Replies

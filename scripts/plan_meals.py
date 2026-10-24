@@ -75,7 +75,7 @@ def build_price_book(typical, deals, today):
             continue  # keep the cheaper deal
         loose = bool(d.get("loose", current["loose"]))
         book[name] = {"unit": base_unit, "pack": pack_in_base, "unit_price": unit_price, "loose": loose,
-                      "source": "deal", "store": d.get("store"), "kind": d.get("kind", "deal")}
+                      "source": "deal", "store": d.get("store")}
     return book, notes
 
 
@@ -166,8 +166,7 @@ def build_result(profile, deals, today, recipes_doc, typical, exclude=frozenset(
         buy, packs, c = line_cost(book[item], need[item])
         entry = book[item]
         shopping.append({"item": item, "buy": round(buy, 3), "unit": entry["unit"], "packs": packs,
-                         "cost": round(c, 2), "source": entry["source"], "store": entry["store"],
-                         "kind": entry.get("kind")})
+                         "cost": round(c, 2), "source": entry["source"], "store": entry["store"]})
         (from_deals if entry["source"] == "deal" else estimated).append(item)
     for rid in combo:
         for p in by_id[rid].get("pantry", []):
@@ -212,11 +211,10 @@ def render_text(r):
         lines.append(f"{s['label']} ({s['day']}): {names}")
     lines.append("Shopping list:")
     for it in r["shopping_list"]:
-        word = {"shelf": "price", "sale": "sale"}.get(it.get("kind"), "deal")
-        where = f"{it['store']} {word}" if it["source"] == "deal" and it["store"] else (word if it["source"] == "deal" else "estimate")
+        where = f"{it['store']} deal" if it["source"] == "deal" and it["store"] else ("deal" if it["source"] == "deal" else "estimate")
         lines.append(f"- {qty_text(it['buy'], it['unit'])} {it['item']}: {money(it['cost'])} ({where})")
     if r["estimated_items"]:
-        lines.append("Priced from typical prices, not a store price: " + ", ".join(r["estimated_items"]) + ".")
+        lines.append("Priced from typical prices, not a store deal: " + ", ".join(r["estimated_items"]) + ".")
     if r["pantry_assumed"]:
         lines.append("Assumes you already have: " + ", ".join(r["pantry_assumed"]) + ".")
     if r.get("delivery_compare"):
