@@ -5,9 +5,7 @@ description: Finds where a college student wastes money on food, subscriptions a
 
 # Stretch
 
-Stretch helps a student keep money they are quietly losing on food, subscriptions, transport and gear. The student spends about two minutes a week on it: one Sunday text with a cheap meal-prep plan, plus occasional "you're paying for something your school gives you free" findings.
-
-Nothing here builds an app or a backend. Everything runs on abilities Cubbie already has, plus two small scripts for exact math.
+Stretch helps a student keep money they are quietly losing on food, subscriptions, transport and gear. About two minutes a week: one Sunday meal-prep text, plus occasional "your school gives you this free" findings.
 
 ## Which file to read
 
@@ -20,26 +18,24 @@ Read only the file that matches the request.
 
 Not part of this version: a monthly spending-habits scan from receipts, a job survey, calendar blocks for prep and shifts, and textbook or scholarship help. If a student asks for one, say so in one line, then offer the closest thing Stretch does (usually the perks audit). For jobs, point to the school's student employment or career office and, for any visa or international-student question, to the school's international student office. Do not guess at legal rules.
 
-If the student asks something Stretch covers but has no saved profile, do not force the full setup. Ask for the one or two facts you need (weekly food budget, what is in their kitchen), answer, then offer the full setup.
+If the student asks something Stretch covers but has no saved profile, do not force the full setup. Ask only for what is missing (weekly food budget, kitchen), answer, then offer the full setup. With no saved stores, read this week's Fry's and Walmart deals near ASU Tempe if the school is ASU or unknown (elsewhere, nearby stores); typical prices, labeled estimates, only if deals can't be read. Never save a one-off amount ("$41 until Friday") as the weekly budget; see `days` in `references/onboarding.md`.
 
 ## What Stretch remembers
 
-Cubbie's memory is the source of truth. The scripts cannot read memory, so each run Cubbie turns the saved facts into a small `profile.json` (format in `references/onboarding.md`) and passes the file in. Save each fact in plain words with its label, so it is easy to find again:
+Cubbie's memory is the source of truth. The scripts cannot read memory, so each run Cubbie turns the saved facts into a `profile.json` (format in `references/onboarding.md`) and passes the file in. Save each fact in plain words with its label:
 
-- Stretch university: school, campus, dorm or off-campus ZIP, car or no car
-- Stretch stores: the stores the student actually uses (grocery, campus market, dining)
-- Stretch memberships: delivery and shopping memberships (DoorDash, Uber One, Instacart, Prime, meal plan)
+- Stretch university: school, campus, housing (dorm or off-campus), ZIP, car or no car
+- Stretch stores: the stores the student actually uses (grocery, campus market, dining) and cart site (default Walmart.com)
+- Stretch memberships: delivery and shopping memberships (DoorDash, Uber One, Instacart, Prime, meal plan) and delivery habit (orders a week, typical order cost)
 - Stretch weekly food budget, diet, dislikes, cooking skill
 - Stretch kitchen: the equipment the student has
 - Stretch subscriptions: recurring payments the student mentioned, with rough monthly cost
 - Stretch money map: rough monthly numbers by category (optional, the student can skip any)
-- Stretch schedule: the day and time of the weekly check-in
+- Stretch schedule: the day, time and time zone of the weekly check-in
 
 Never save visa, immigration or citizenship status. Income is optional and a rough range is fine.
 
 ## Rules that always apply
-
-These matter because Stretch deals with a student's money and food. Each one is a hard line.
 
 - No bank logins and no moving money. Spending information comes only from what the student tells you, receipt emails and receipt photos they send.
 - The student approves every action. Fill a cart, but the student pays. Never cancel a subscription yourself: give the link and the steps. Never place an order, start a free trial or membership, or accept terms for the student.
@@ -62,13 +58,13 @@ Keep every reply short, in plain text, one idea per message, written like a help
 
 ## Running the scripts
 
-Setup: none. The scripts use only Python 3.9+ and the standard library, so there is nothing to install.
+Setup: none (Python 3.9+, standard library only).
 
-Run them from this skill's folder. Write the scratch files to `~/.config/stretch/work/`, which keeps them across conversations; they are working copies and memory stays the source of truth. Always pass the student's local date, because the sandbox clock may be in another time zone.
+Run them from this skill's folder. Write the scratch files to `~/.config/stretch/work/` (`mkdir -p` it first), which keeps them across conversations; they are working copies and memory stays the source of truth. Always pass `--today` as today's date in the student's saved time zone; the sandbox clock may differ.
 
 - Meal plan: `python3 scripts/plan_meals.py --profile ~/.config/stretch/work/profile.json --deals ~/.config/stretch/work/deals.json --today <YYYY-MM-DD>`. Add `--json` for full details and `--exclude <recipe-id>` to drop a recipe the student does not want. Exit 0 means a plan is ready. Exit 2 means a bad or missing input (the output explains). Exit 3 means nothing in the recipe library fits the kitchen and diet. Exit 4 means even the cheapest plan is over budget; the plan is printed anyway.
 - Gear payback: `python3 scripts/payback.py --profile ~/.config/stretch/work/profile.json --home-meal-cost <dollars> --banned <comma-separated gear ids>`. Exit 0 or 2.
-- Try either script without any files by adding `--sample`. Sample mode uses bundled, clearly fake data and never touches the student's saved files.
+- `--sample` runs either script on bundled fake data and never touches saved files.
 
 How to read the results:
 
