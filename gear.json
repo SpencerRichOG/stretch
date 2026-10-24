@@ -1,0 +1,17 @@
+{
+  "_note": "Typical NEW prices for budget-brand kitchen gear (rough estimates, Oct 2026). Say 'around' when quoting them. 'requires' means the item is only useful with those other items. 'housing' is 'ok' or 'check' (many dorms restrict appliances; check the school's housing rules before suggesting).",
+  "items": [
+    {"id": "pan", "name": "10-12 inch pan", "tier": 1, "price": 12, "requires": ["stove"], "housing": "ok"},
+    {"id": "pot", "name": "3-quart pot", "tier": 1, "price": 12, "requires": ["stove"], "housing": "ok"},
+    {"id": "knife", "name": "chef's knife", "tier": 1, "price": 8, "requires": [], "housing": "ok"},
+    {"id": "cutting_board", "name": "cutting board", "tier": 1, "price": 5, "requires": [], "housing": "ok"},
+    {"id": "sheet_pan", "name": "sheet pan", "tier": 1, "price": 7, "requires": ["oven"], "housing": "ok"},
+    {"id": "containers", "name": "meal-prep containers (set of 10)", "tier": 1, "price": 8, "requires": [], "housing": "ok"},
+    {"id": "rice_cooker", "name": "rice cooker", "tier": 2, "price": 25, "requires": [], "housing": "check"},
+    {"id": "air_fryer", "name": "air fryer", "tier": 2, "price": 45, "requires": [], "housing": "check"},
+    {"id": "blender", "name": "blender", "tier": 2, "price": 25, "requires": [], "housing": "check"},
+    {"id": "shaker", "name": "shaker bottle", "tier": 2, "price": 5, "requires": [], "housing": "ok"},
+    {"id": "toaster", "name": "toaster", "tier": 2, "price": 18, "requires": [], "housing": "check"},
+    {"id": "microwave", "name": "microwave (only if you have none)", "tier": 2, "price": 55, "requires": [], "housing": "check"}
+  ]
+}

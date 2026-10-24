@@ -1,0 +1,129 @@
+{
+  "_note": "Budget-first recipes, each making about 4 servings. 'needs' is a list of equipment options: a recipe works if the student has ALL items of ANY one option (an empty option means no equipment). Ingredient 'amount' is in the base unit from typical_prices.json. 'diet_level' is the strictest diet the recipe fits: vegan, vegetarian, fish or meat. 'contains' tags and ingredient names feed the student's avoid list. This is a convenience filter, not allergy safety.",
+  "servings": 4,
+  "recipes": [
+    {
+      "id": "chicken-rice-bowls", "name": "Chicken and rice bowls with broccoli", "family": "chicken", "diet_level": "meat", "skill": 1,
+      "needs": [["pan", "stove", "pot"], ["pan", "stove", "rice_cooker"], ["pan", "stove", "microwave"]],
+      "contains": [],
+      "ingredients": [{"item": "chicken thighs", "amount": 2}, {"item": "rice", "amount": 0.5}, {"item": "frozen broccoli", "amount": 0.75}],
+      "pantry": ["salt", "pepper", "cooking oil", "soy sauce"],
+      "swap": "Swap half the rice for extra frozen broccoli: cheaper per serving and more veggies."
+    },
+    {
+      "id": "egg-fried-rice", "name": "Egg fried rice with veggies", "family": "egg", "diet_level": "vegetarian", "skill": 1,
+      "needs": [["pan", "stove", "pot"], ["pan", "stove", "rice_cooker"], ["pan", "stove", "microwave"]],
+      "contains": ["egg", "soy"],
+      "ingredients": [{"item": "eggs", "amount": 6}, {"item": "rice", "amount": 0.5}, {"item": "frozen mixed vegetables", "amount": 1}],
+      "pantry": ["salt", "cooking oil", "soy sauce"],
+      "swap": "Use frozen mixed veggies instead of fresh: cheaper and already chopped."
+    },
+    {
+      "id": "microwave-egg-burritos", "name": "Microwave egg and cheese burritos", "family": "egg", "diet_level": "vegetarian", "skill": 1,
+      "needs": [["microwave"]],
+      "contains": ["egg", "dairy", "gluten"],
+      "ingredients": [{"item": "eggs", "amount": 8}, {"item": "tortillas", "amount": 8}, {"item": "shredded cheese", "amount": 0.5}, {"item": "salsa", "amount": 0.5}],
+      "pantry": ["salt", "pepper"]
+    },
+    {
+      "id": "bean-cheese-quesadillas", "name": "Black bean and cheese quesadillas", "family": "bean", "diet_level": "vegetarian", "skill": 1,
+      "needs": [["pan", "stove"], ["microwave"]],
+      "contains": ["dairy", "gluten"],
+      "ingredients": [{"item": "black beans", "amount": 2}, {"item": "tortillas", "amount": 8}, {"item": "shredded cheese", "amount": 0.5}, {"item": "salsa", "amount": 0.5}],
+      "pantry": ["salt", "chili powder"],
+      "swap": "Use a little less cheese and a few more beans: cheaper and more fiber."
+    },
+    {
+      "id": "pasta-red-sauce-spinach", "name": "Pasta with red sauce and spinach", "family": "pasta", "diet_level": "vegan", "skill": 1,
+      "needs": [["pot", "stove"]],
+      "contains": ["gluten"],
+      "ingredients": [{"item": "pasta", "amount": 1}, {"item": "pasta sauce", "amount": 1}, {"item": "frozen spinach", "amount": 0.625}],
+      "pantry": ["salt", "garlic powder"],
+      "swap": "Pick whole-wheat pasta if it is within about 30 cents: more fiber for almost the same price."
+    },
+    {
+      "id": "lentil-tomato-stew", "name": "Lentil and tomato stew", "family": "lentil", "diet_level": "vegan", "skill": 2,
+      "needs": [["pot", "stove", "knife"]],
+      "contains": [],
+      "ingredients": [{"item": "lentils", "amount": 0.5}, {"item": "diced tomatoes", "amount": 1}, {"item": "onions", "amount": 0.5}, {"item": "carrots", "amount": 0.5}],
+      "pantry": ["salt", "pepper", "chili powder", "cooking oil"]
+    },
+    {
+      "id": "turkey-bean-chili", "name": "Turkey and bean chili", "family": "turkey", "diet_level": "meat", "skill": 2,
+      "needs": [["pot", "stove", "knife"]],
+      "contains": [],
+      "ingredients": [{"item": "ground turkey", "amount": 1}, {"item": "black beans", "amount": 2}, {"item": "diced tomatoes", "amount": 1}, {"item": "onions", "amount": 0.5}],
+      "pantry": ["salt", "pepper", "chili powder", "cooking oil"]
+    },
+    {
+      "id": "sheet-pan-chicken-potatoes", "name": "Sheet-pan chicken, potatoes and broccoli", "family": "chicken", "diet_level": "meat", "skill": 1,
+      "needs": [["oven", "sheet_pan"]],
+      "contains": [],
+      "ingredients": [{"item": "chicken thighs", "amount": 2}, {"item": "potatoes", "amount": 2}, {"item": "frozen broccoli", "amount": 0.75}],
+      "pantry": ["salt", "pepper", "cooking oil"]
+    },
+    {
+      "id": "air-fryer-chicken-veg", "name": "Air-fryer chicken thighs with veggies", "family": "chicken", "diet_level": "meat", "skill": 1,
+      "needs": [["air_fryer"]],
+      "contains": [],
+      "ingredients": [{"item": "chicken thighs", "amount": 2}, {"item": "frozen mixed vegetables", "amount": 1}, {"item": "potatoes", "amount": 1}],
+      "pantry": ["salt", "pepper", "cooking oil"]
+    },
+    {
+      "id": "rice-and-beans-bowls", "name": "Rice and beans bowls", "family": "bean", "diet_level": "vegan", "skill": 1,
+      "needs": [["pot", "stove"], ["rice_cooker"], ["microwave"]],
+      "contains": [],
+      "ingredients": [{"item": "rice", "amount": 0.5}, {"item": "black beans", "amount": 2}, {"item": "salsa", "amount": 0.5}, {"item": "frozen mixed vegetables", "amount": 0.5}],
+      "pantry": ["salt", "chili powder"]
+    },
+    {
+      "id": "tuna-chickpea-wraps", "name": "Tuna and chickpea wraps (no cooking)", "family": "tuna", "diet_level": "fish", "skill": 1,
+      "needs": [[]],
+      "contains": ["fish", "gluten"],
+      "ingredients": [{"item": "canned tuna", "amount": 3}, {"item": "chickpeas", "amount": 1}, {"item": "tortillas", "amount": 8}],
+      "pantry": ["salt", "pepper"]
+    },
+    {
+      "id": "tofu-veggie-stir-fry", "name": "Tofu and veggie stir-fry over rice", "family": "tofu", "diet_level": "vegan", "skill": 2,
+      "needs": [["pan", "stove", "pot"], ["pan", "stove", "rice_cooker"], ["pan", "stove", "microwave"]],
+      "contains": ["soy"],
+      "ingredients": [{"item": "tofu", "amount": 2}, {"item": "frozen mixed vegetables", "amount": 1}, {"item": "rice", "amount": 0.5}],
+      "pantry": ["cooking oil", "soy sauce", "garlic powder"]
+    },
+    {
+      "id": "peanut-noodles", "name": "Peanut noodles with veggies", "family": "pasta", "diet_level": "vegan", "skill": 1,
+      "needs": [["pot", "stove"]],
+      "contains": ["peanut", "gluten", "soy"],
+      "ingredients": [{"item": "pasta", "amount": 0.75}, {"item": "peanut butter", "amount": 0.25}, {"item": "frozen mixed vegetables", "amount": 0.5}],
+      "pantry": ["soy sauce", "garlic powder"]
+    },
+    {
+      "id": "loaded-baked-potatoes", "name": "Loaded baked potatoes with beans and cheese", "family": "potato", "diet_level": "vegetarian", "skill": 1,
+      "needs": [["oven"], ["microwave"]],
+      "contains": ["dairy"],
+      "ingredients": [{"item": "potatoes", "amount": 3}, {"item": "black beans", "amount": 2}, {"item": "shredded cheese", "amount": 0.5}, {"item": "salsa", "amount": 0.5}],
+      "pantry": ["salt", "pepper"]
+    },
+    {
+      "id": "chickpea-tomato-curry", "name": "Chickpea and tomato curry", "family": "chickpea", "diet_level": "vegan", "skill": 2,
+      "needs": [["pot", "stove", "knife"]],
+      "contains": [],
+      "ingredients": [{"item": "chickpeas", "amount": 2}, {"item": "diced tomatoes", "amount": 1}, {"item": "onions", "amount": 0.5}, {"item": "rice", "amount": 0.5}],
+      "pantry": ["salt", "curry powder", "cooking oil"]
+    },
+    {
+      "id": "blender-black-bean-soup", "name": "Blended black bean soup", "family": "bean", "diet_level": "vegan", "skill": 2,
+      "needs": [["pot", "stove", "blender"]],
+      "contains": [],
+      "ingredients": [{"item": "black beans", "amount": 3}, {"item": "diced tomatoes", "amount": 1}, {"item": "onions", "amount": 0.5}],
+      "pantry": ["salt", "cumin", "cooking oil"]
+    },
+    {
+      "id": "cheesy-spinach-egg-skillet", "name": "Cheesy spinach and potato egg skillet", "family": "egg", "diet_level": "vegetarian", "skill": 1,
+      "needs": [["pan", "stove"]],
+      "contains": ["egg", "dairy"],
+      "ingredients": [{"item": "eggs", "amount": 8}, {"item": "frozen spinach", "amount": 0.625}, {"item": "shredded cheese", "amount": 0.5}, {"item": "potatoes", "amount": 1}],
+      "pantry": ["salt", "pepper", "cooking oil"]
+    }
+  ]
+}

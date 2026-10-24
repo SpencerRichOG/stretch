@@ -1,0 +1,27 @@
+{
+  "_note": "ROUGH US supermarket estimates (Oct 2026) used ONLY when no store deal was found for an item. They are not real quotes. Always tell the student which lines are estimates.",
+  "items": {
+    "chicken thighs": {"unit": "lb", "pack": 1, "pack_price": 2.30, "loose": true, "aliases": ["chicken thigh", "bone-in chicken thighs", "chicken drumsticks", "chicken legs"]},
+    "ground turkey": {"unit": "lb", "pack": 1, "pack_price": 5.00, "loose": false, "aliases": ["turkey mince"]},
+    "eggs": {"unit": "each", "pack": 12, "pack_price": 3.20, "loose": false, "aliases": ["egg", "large eggs", "dozen eggs"]},
+    "rice": {"unit": "lb", "pack": 2, "pack_price": 2.60, "loose": false, "aliases": ["white rice", "long grain rice", "long-grain rice"]},
+    "pasta": {"unit": "lb", "pack": 1, "pack_price": 1.60, "loose": false, "aliases": ["spaghetti", "penne", "dry pasta", "macaroni"]},
+    "pasta sauce": {"unit": "each", "pack": 1, "pack_price": 2.50, "loose": false, "aliases": ["marinara", "jarred pasta sauce", "spaghetti sauce", "tomato sauce jar"]},
+    "black beans": {"unit": "can", "pack": 1, "pack_price": 1.10, "loose": false, "aliases": ["canned black beans"]},
+    "chickpeas": {"unit": "can", "pack": 1, "pack_price": 1.20, "loose": false, "aliases": ["canned chickpeas", "garbanzo beans"]},
+    "lentils": {"unit": "lb", "pack": 1, "pack_price": 2.00, "loose": false, "aliases": ["dry lentils", "brown lentils", "green lentils"]},
+    "diced tomatoes": {"unit": "can", "pack": 1, "pack_price": 1.20, "loose": false, "aliases": ["canned tomatoes", "canned diced tomatoes"]},
+    "tortillas": {"unit": "each", "pack": 10, "pack_price": 2.80, "loose": false, "aliases": ["flour tortillas", "wraps", "tortilla"]},
+    "shredded cheese": {"unit": "lb", "pack": 0.5, "pack_price": 2.80, "loose": false, "aliases": ["cheese", "cheddar", "shredded cheddar", "mexican cheese blend"]},
+    "salsa": {"unit": "each", "pack": 1, "pack_price": 2.50, "loose": false, "aliases": ["jar of salsa"]},
+    "frozen broccoli": {"unit": "lb", "pack": 0.75, "pack_price": 1.90, "loose": false, "aliases": ["broccoli florets", "frozen broccoli florets"]},
+    "frozen mixed vegetables": {"unit": "lb", "pack": 1, "pack_price": 1.70, "loose": false, "aliases": ["frozen mixed veg", "frozen veggies", "mixed vegetables"]},
+    "frozen spinach": {"unit": "lb", "pack": 0.625, "pack_price": 1.60, "loose": false, "aliases": ["spinach"]},
+    "onions": {"unit": "lb", "pack": 3, "pack_price": 3.00, "loose": false, "aliases": ["onion", "yellow onions", "yellow onion"]},
+    "carrots": {"unit": "lb", "pack": 1, "pack_price": 1.50, "loose": false, "aliases": ["carrot"]},
+    "potatoes": {"unit": "lb", "pack": 5, "pack_price": 4.50, "loose": false, "aliases": ["potato", "russet potatoes", "russet potato"]},
+    "peanut butter": {"unit": "lb", "pack": 1, "pack_price": 2.50, "loose": false, "aliases": ["pb"]},
+    "canned tuna": {"unit": "can", "pack": 1, "pack_price": 1.10, "loose": false, "aliases": ["tuna"]},
+    "tofu": {"unit": "each", "pack": 1, "pack_price": 2.30, "loose": false, "aliases": ["firm tofu", "extra firm tofu", "block of tofu"]}
+  }
+}

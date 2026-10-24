@@ -1,0 +1,12 @@
+{
+  "_note": "SAMPLE ILLUSTRATIVE deals for --sample runs. These are NOT real store prices. Real runs use the current weekly ad Cubbie reads.",
+  "deals": [
+    {"store": "Fry's", "item": "chicken thighs", "price": 1.99, "size": 1, "unit": "lb", "valid_until": "2026-10-28"},
+    {"store": "Fry's", "item": "rice", "price": 2.00, "size": 2, "unit": "lb", "valid_until": "2026-10-28"},
+    {"store": "Fry's", "item": "eggs", "price": 2.49, "size": 1, "unit": "dozen", "valid_until": "2026-10-28"},
+    {"store": "Fry's", "item": "black beans", "price": 0.89, "size": 1, "unit": "can", "valid_until": "2026-10-28"},
+    {"store": "Fry's", "item": "frozen mixed vegetables", "price": 1.25, "size": 12, "unit": "oz", "valid_until": "2026-10-28"},
+    {"store": "Fry's", "item": "tortillas", "price": 2.00, "size": 10, "unit": "each", "valid_until": "2026-10-28"},
+    {"store": "Fry's", "item": "pasta", "price": 1.00, "size": 1, "unit": "lb", "valid_until": "2026-10-21"}
+  ]
+}

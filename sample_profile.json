@@ -1,0 +1,12 @@
+{
+  "_note": "SAMPLE data for --sample runs. Not a real student.",
+  "weekly_food_budget": 41,
+  "diet": "none",
+  "avoid": [],
+  "kitchen": ["microwave", "stove", "pan", "pot", "knife", "cutting_board"],
+  "cooking_skill": "basic",
+  "days": 5,
+  "meals_per_day": 2,
+  "housing": "dorm",
+  "delivery": {"orders_per_week": 3, "avg_order": 18.0}
+}
