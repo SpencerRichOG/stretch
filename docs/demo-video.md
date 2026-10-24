@@ -15,7 +15,7 @@ Changes from the spec:
 | 0-3 s | [ON-CAMERA PERSON: Lucas decides; must be a real person, no AI avatar], real fridge or dorm: opens a near-empty fridge, looks at their phone. Show no bank app and no real balance. | "$41 until Friday." | "41 dollars until Friday. Nothing in the fridge." |
 | 3-10 s | Screen recording: the student types to Cubbie "I have $41 until Friday and nothing in my fridge." and sends it. | "So I texted Cubbie." | "So I texted Cubbie." |
 | 10-20 s | Screen recording: Stretch's reply scrolls in (this week's deals, the prep plan, the total). Zoom in on the total line. | "[TOTAL] / [BUDGET]" then "[DAYS] days of food" | "It found this week's deals near campus and planned [DAYS] days of food for [TOTAL]." |
-| 20-26 s | Screen recording: the perks reply line "Spotify student plan: $6.99/mo vs $12.99, saves about $72/yr." Zoom in on it. | "+ about $72/yr" | "Then it caught me paying full price for Spotify. The student plan saves about 72 bucks a year." |
+| 20-26 s | Screen recording: the perks reply line "Spotify student plan: $6.99/mo vs $12.99, saves about $72/yr." Zoom in on it. | "+ about $72/yr" | "Then it flagged Spotify: the student plan is $6.99 vs $12.99, about 72 bucks a year." |
 | 26-33 s | Screen recording: the student replies "1" and the cart fills in Cubbie's browser. Stop before checkout. **Fallback** if Walmart.com shows a bot check: show Stretch's shopping-list reply instead. | "You just tap pay." (fallback: "List's ready. You just shop.") | "I reply 1, and the cart fills itself. I still pay." |
 | 33-40 s | Quick cuts, about 3 s each: (a) the gear reply ("is a rice cooker worth it", with its payback line); (b) the subscription audit's top 3 list. | "Every Sunday. 2 minutes." | "Kitchen gear that pays for itself. Subscriptions you forgot about. Every Sunday, two minutes." |
 | 40-45 s | End card (see section 6). | End card text | "Stretch. Text the link to Cubbie." |
@@ -64,11 +64,11 @@ Takes (on camera, each in a new message):
 ## 4. Captions and hashtags
 
 TikTok:
-> $41 until Friday and an empty fridge, so I texted Cubbie. Stretch planned my week from this week's deals and caught me paying full price for Spotify. Free Cubbie Skill, link in bio.
+> $41 until Friday and an empty fridge, so I texted Cubbie. Stretch planned my week from this week's deals and flagged Spotify: the student plan is $6.99 vs $12.99. A Cubbie Skill, link in bio.
 > #college #collegelife #brokecollegestudent #mealprep #budgeting #studentdiscount #asu #sundevils #cubbie
 
 Instagram (Reels):
-> $41 until Friday. Empty fridge. One text. Stretch is a free Cubbie Skill that plans a week of food from this week's deals and finds student perks you aren't using. Text the link to your Cubbie (link in bio).
+> $41 until Friday. Empty fridge. One text. Stretch is a Cubbie Skill that plans a week of food from this week's deals and finds student perks you aren't using. Text the link to your Cubbie (link in bio).
 > #collegelife #collegebudget #mealprep #studentlife #studentdiscount #asu #sundevils #savemoney #cubbie
 
 Put https://github.com/SpencerRichOG/stretch in the bio or first comment. Any number in a caption must match the video.
