@@ -24,11 +24,12 @@ All in references/perks.md with URLs and the date checked. Not verified: Amazon 
 ## Known risks
 
 - Walmart.com may show a bot check when Cubbie's browser builds the cart. SKILL.md falls back to a plain shopping list after one try. Test on a real Cubbie before the video.
-- Whether Fry's or Walmart weekly ads can be read reliably by Cubbie's web ability is untested. Missing deals fall back to typical prices (assets/typical_prices.json), which are rough estimates labeled as such.
+- Weekly ads: Cubbie reading ad pages gave mostly estimates, so scripts/fetch_deals.py now pulls real ad prices from Flipp's public search (backflipp.wishabi.com, HTTPS JSON, no key). Checked 2026-10-24 for ZIP 85281: it returned live Fry's, Safeway, Albertsons, Bashas', Food City and Vallarta ad prices. It is unofficial and could change; exit 5 falls back to reading ad pages. Not yet run from a real Cubbie sandbox. Walmart regular shelf prices are not in weekly ads.
+- Price sources considered: Kroger's official API (real Fry's shelf prices per store) needs each student to register a developer app for a client ID and secret, too much friction for now but the best upgrade. Target's RedSky API is unofficial and untested. Walmart has a bot wall, Instacart's API is partner-only and returns cart links, Aldi has no public API.
 - Recipe prices are estimates, not live quotes.
 - Submission link: the kit's cubbie-hackathon SKILL.md says to submit the pinned commit link; cubbie-testing.md says the repository link. Ask in Discord (https://discord.gg/7eJADTbQMT) or check hackathon.cubbie.ai before submitting.
 - Track 1 deadline: the kit says finish within the first 10 hours of the event. The exact time was not found. Confirm on hackathon.cubbie.ai or Discord.
 
 ## Scripts
 
-Standard library only, Python 3.9+. Both have `--sample`. Exit codes: plan_meals 0/2/3/4, payback 0/2. Output stays well under Cubbie's 8,000-character read limit.
+Standard library only, Python 3.9+. All have `--sample`. Exit codes: plan_meals 0/2/3/4, payback 0/2, fetch_deals 0/2/5. Output stays well under Cubbie's 8,000-character read limit.

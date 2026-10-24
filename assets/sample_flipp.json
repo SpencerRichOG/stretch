@@ -1,0 +1,31 @@
+{
+  "_note": "SAMPLE ILLUSTRATIVE weekly-ad hits for fetch_deals.py --sample, shaped like Flipp's search results. These are NOT real store prices.",
+  "eggs": [
+    {"merchant_name": "Fry's Food Stores", "name": "Kroger Eggs", "current_price": 1.69, "pre_price_text": null, "post_price_text": "With Card", "valid_from": "2026-10-21T07:00:00+00:00", "valid_to": "2026-10-28T06:59:59+00:00"},
+    {"merchant_name": "Safeway", "name": "Lucerne Cage Free Eggs Large Grade A 18 ct", "current_price": 2.49, "pre_price_text": null, "post_price_text": "ea with coupon", "valid_to": "2026-10-28T06:59:59+00:00"},
+    {"merchant_name": "Fry's Food Stores", "name": "Egg Roll Wrappers", "current_price": 1.00, "valid_to": "2026-10-28T06:59:59+00:00"}
+  ],
+  "chicken thighs": [
+    {"merchant_name": "Fry's Food Stores", "name": "Bone-In Chicken Thighs or Drumsticks", "current_price": 0.99, "post_price_text": "lb With Card", "valid_to": "2026-10-28T06:59:59+00:00"},
+    {"merchant_name": "Fry's Food Stores", "name": "Simple Truth Boneless Skinless Chicken Breast", "current_price": 2.99, "post_price_text": "lb", "valid_to": "2026-10-28T06:59:59+00:00"}
+  ],
+  "rice": [
+    {"merchant_name": "Albertsons", "name": "Signature SELECT Tomatoes 14.5-15 oz., Rice 16 oz. or Beans 15-15.5 oz.", "current_price": 0.69, "post_price_text": "ea With Coupon", "valid_to": "2026-10-28T06:59:59+00:00"},
+    {"merchant_name": "Fry's Food Stores", "name": "Kroger Long Grain Rice 2 lb", "current_price": 1.79, "post_price_text": "With Card", "valid_to": "2026-10-28T06:59:59+00:00"},
+    {"merchant_name": "Fry's Food Stores", "name": "Rice-A-Roni", "current_price": 1.00, "valid_to": "2026-10-28T06:59:59+00:00"}
+  ],
+  "black beans": [
+    {"merchant_name": "Fry's Food Stores", "name": "Kroger Black Beans 15 oz", "current_price": 5, "pre_price_text": "6 for", "post_price_text": "With Card", "valid_to": "2026-10-28T06:59:59+00:00"}
+  ],
+  "pasta": [
+    {"merchant_name": "Fry's Food Stores", "name": "Barilla Pasta 16 oz", "current_price": 1.25, "post_price_text": "With Card", "valid_to": "2026-10-28T06:59:59+00:00"},
+    {"merchant_name": "Fry's Food Stores", "name": "Old expired Pasta 16 oz", "current_price": 0.50, "valid_to": "2026-10-20T06:59:59+00:00"}
+  ],
+  "onions": [
+    {"merchant_name": "Fry's Food Stores", "name": "Yellow Onions 3 lb Bag", "current_price": 2.49, "valid_to": "2026-10-28T06:59:59+00:00"},
+    {"merchant_name": "Fry's Food Stores", "name": "Onion Rings", "current_price": 2.00, "valid_to": "2026-10-28T06:59:59+00:00"}
+  ],
+  "tortillas": [
+    {"merchant_name": "Food City", "name": "Mission Flour Tortillas", "current_price": 2.00, "valid_to": "2026-10-28T06:59:59+00:00"}
+  ]
+}

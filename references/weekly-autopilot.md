@@ -5,7 +5,11 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 ## Steps
 
 1. Read the student's saved stores, weekly food budget, diet, dislikes, kitchen, memberships and delivery habit from memory. If the stores, budget or kitchen are missing, send one question for the missing piece and stop.
-2. Find this week's deals. For each saved store (at most two), search the web for its current weekly ad or deals page near the student's ZIP, open it, and read it. Record only prices you actually read, and only for items in the recipe library. The library's item names are the keys of `assets/typical_prices.json` (chicken thighs, rice, eggs, black beans and so on). Write what you found to `~/.config/stretch/work/deals.json` (format below). If a store's ad cannot be read, skip that store, use typical prices, and say so in the message.
+2. Find this week's deals. Run `fetch_deals.py` first (see "Running the scripts" in SKILL.md) with the student's ZIP, their saved stores (at most two) and their local date. It pulls real prices from the stores' current weekly ads and writes `~/.config/stretch/work/deals.json` itself, so do not edit that file afterward. Quote store names and prices from its output exactly.
+   - Exit 0 with some `DEALS`: go on. Items listed under `NO_AD_PRICE` are not on sale this week; the plan uses typical prices for them and marks them estimates.
+   - Exit 0 with zero deals for the saved stores: rerun once without `--stores` to see every store near the ZIP. If another store has better prices, mention it in one line, but plan with the student's own stores unless they say otherwise.
+   - Exit 5 (the ad service could not be reached): fall back to the old way. For each saved store, search the web for its current weekly ad near the student's ZIP, open it, and record only prices you actually read, for items in the recipe library (the keys of `assets/typical_prices.json`). Write them to `deals.json` (format below). If a store's ad cannot be read, skip it, use typical prices, and say so in the message.
+   - Some prices need the store's loyalty card or a digital coupon (the output says "with card" or "with coupon"). Say so in a few words when you quote one.
 3. Write `profile.json` from memory (see `references/onboarding.md`), then run `plan_meals.py` with the student's local date (see "Running the scripts" in SKILL.md). Use `--json` once so you also have `home_cost_per_meal` for the gear ranking.
 4. Handle the exit code as SKILL.md describes.
 5. Send one message (format below).
@@ -29,6 +33,7 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 - Meat and produce sold by weight are priced per pound. Packaged goods are priced per package (a 2 lb bag of rice at $2.00 is size 2, unit lb, price 2.00).
 - If two stores both list an item, put both in; the script keeps the cheaper one and records the store.
 - Do not copy a price you did not see. Leaving an item out is better than guessing.
+- `fetch_deals.py` also adds `ad_text` (the ad's wording) and `condition` ("with card"); `plan_meals.py` ignores them.
 
 ## The message
 
