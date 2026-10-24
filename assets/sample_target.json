@@ -1,0 +1,36 @@
+{
+  "_note": "SAMPLE ILLUSTRATIVE Target search results for target_prices.py --sample, shaped like redsky plp_search_v2. These are NOT real store prices.",
+  "store": {"store_id": "0000", "location_name": "Tempe Sample"},
+  "eggs": [
+    {"item": {"product_description": {"title": "Grade A Large Eggs - 12ct - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 2.39, "formatted_current_price": "$2.39"}},
+    {"item": {"product_description": {"title": "Egg Roll Wrappers - 16oz"}}, "price": {"current_retail": 1.00, "formatted_current_price": "$1.00"}}
+  ],
+  "rice": [
+    {"item": {"product_description": {"title": "Long Grain White Rice - 2lbs - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 1.89, "formatted_current_price": "$1.89"}},
+    {"item": {"product_description": {"title": "Jasmine Rice - 2lbs to 5lbs"}}, "price": {"current_retail": 3.00, "formatted_current_price": "$3.00 - $6.00"}}
+  ],
+  "chicken thighs": [
+    {"item": {"product_description": {"title": "Bone-In Chicken Thighs - 1.5-2.5 lbs - price per lb - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 1.79, "formatted_current_price": "$1.79/lb"}}
+  ],
+  "black beans": [
+    {"item": {"product_description": {"title": "Black Beans 15.5oz - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 0.79, "formatted_current_price": "$0.79"}}
+  ],
+  "pasta": [
+    {"item": {"product_description": {"title": "Spaghetti Pasta - 16oz - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 0.99, "formatted_current_price": "$0.99"}}
+  ],
+  "pasta sauce": [
+    {"item": {"product_description": {"title": "Marinara Pasta Sauce - 24oz - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 1.99, "reg_retail": 2.49, "formatted_current_price": "$1.99", "formatted_comparison_price": "$2.49"}}
+  ],
+  "frozen broccoli": [
+    {"item": {"product_description": {"title": "Frozen Broccoli Florets - 12oz - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 1.39, "formatted_current_price": "$1.39"}}
+  ],
+  "frozen mixed vegetables": [
+    {"item": {"product_description": {"title": "Frozen Mixed Vegetables - 12oz - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 1.19, "formatted_current_price": "$1.19"}}
+  ],
+  "frozen spinach": [
+    {"item": {"product_description": {"title": "Frozen Chopped Spinach - 12oz - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 1.29, "formatted_current_price": "$1.29"}}
+  ],
+  "peanut butter": [
+    {"item": {"product_description": {"title": "Creamy Peanut Butter 16oz - Good &#38; Gather&#8482;"}}, "price": {"current_retail": 1.99, "formatted_current_price": "$1.99"}}
+  ]
+}
