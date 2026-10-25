@@ -1,0 +1,10 @@
+{
+  "_note": "SAMPLE invented shelf and student prices for merge_prices.py --sample. NOT real store prices; no page was read. Row 4 is 10x too cheap and row 5 is stale, so --sample shows both drops.",
+  "prices": [
+    {"store": "Walmart", "item": "peanut butter", "price": 2.24, "size": 16, "unit": "oz", "seen_on": "2026-10-24", "url": "https://www.walmart.com/search?q=peanut+butter", "kind": "shelf", "note": "SAMPLE online price"},
+    {"store": "Walmart", "item": "pasta", "price": 1.12, "size": 1, "unit": "lb", "seen_on": "2026-10-24", "url": "https://www.walmart.com/search?q=spaghetti", "kind": "shelf", "note": "SAMPLE online price"},
+    {"store": "Fry's", "item": "salsa", "price": 2.29, "size": 1, "unit": "each", "seen_on": "2026-10-25", "kind": "student", "note": "SAMPLE price-tag photo"},
+    {"store": "Walmart", "item": "shredded cheese", "price": 0.28, "size": 8, "unit": "oz", "seen_on": "2026-10-24", "kind": "shelf", "note": "SAMPLE misread"},
+    {"store": "Walmart", "item": "frozen broccoli", "price": 1.48, "size": 12, "unit": "oz", "seen_on": "2026-10-18", "kind": "shelf", "note": "SAMPLE stale"}
+  ]
+}

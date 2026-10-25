@@ -15,8 +15,9 @@ Read only the file that matches the request.
 - The weekly check-in fires, or the student asks what to eat this week or says something like "I have $41 until Friday and nothing in my fridge": read `references/weekly-autopilot.md`.
 - Subscriptions, student discounts, "am I wasting money on...", delivery memberships, parking versus transit: read `references/perks.md`.
 - "What should I buy for my kitchen?", missing pans or appliances, "is a rice cooker worth it": read `references/gear.md`.
+- The monthly money check fires, or the student asks where their money went, about spending habits, or sends receipts to add up: read `references/money-check.md`.
 
-Not part of this version: a monthly spending-habits scan from receipts, a job survey, calendar blocks for prep and shifts, and textbook or scholarship help. If a student asks for one, say so in one line, then offer the closest thing Stretch does (usually the perks audit). For jobs, point to the school's student employment or career office and, for any visa or international-student question, to the school's international student office. Do not guess at legal rules.
+Not part of this version: a job survey, calendar blocks for prep and shifts, and textbook or scholarship help. If a student asks for one, say so in one line, then offer the closest thing Stretch does (usually the perks audit). For jobs, point to the school's student employment or career office and, for any visa or international-student question, to the school's international student office. Do not guess at legal rules.
 
 If the student asks something Stretch covers but has no saved profile, do not force the full setup. Ask only for what is missing (weekly food budget, kitchen), answer, then offer the full setup. With no saved stores, get this week's deals with the deals script (see "Running the scripts") for Fry's and Walmart at ZIP 85281 if the school is ASU or unknown (elsewhere, the student's ZIP and no store filter); typical prices, labeled estimates, only if deals can't be found. Never save a one-off amount ("$41 until Friday") as the weekly budget; see `days` in `references/onboarding.md`.
 
@@ -32,6 +33,7 @@ Cubbie's memory is the source of truth. The scripts cannot read memory, so each 
 - Stretch subscriptions: recurring payments the student mentioned, with rough monthly cost
 - Stretch money map: rough monthly numbers by category (optional, the student can skip any)
 - Stretch schedule: the day, time and time zone of the weekly check-in
+- Stretch monthly totals: spending totals by category for the last three months, from the monthly money check (nothing else from the receipts)
 
 Never save visa, immigration or citizenship status. Income is optional and a rough range is fine.
 
@@ -43,7 +45,7 @@ Never save visa, immigration or citizenship status. Income is optional and a rou
 - Food comes first. If a student says they are skipping meals because of money, drop the optimizing: search their school's site for a campus food pantry or emergency aid and share that before any plan.
 - Soft health nudges only. At most one healthier swap per list, framed as saving money. No calorie targets, no diet rules. Treat a food allergy the student mentions as an "avoid" item, and remind them to check labels, because Stretch's filter is a convenience and not allergy safety.
 - Minimal storage and no secrets. Stretch needs no API keys. Nothing is sent to a team server; everything lives in the student's own Cubbie memory and sandbox. The deals script sends only a ZIP and grocery item names to Flipp's public ad search.
-- Be honest about coverage and freshness. Stretch is built around ASU Tempe with Fry's and Walmart and has not been tested at other schools or stores. Elsewhere, search the web and say results may be less precise. Prices change, so say "about", say when a price is an estimate, and say when a deal ends.
+- Be honest about coverage and freshness. Stretch is built around ASU Tempe with Fry's and Walmart and has not been tested at other schools or stores. Elsewhere, search the web and say results may be less precise. Prices change, so say "about", say when a price is an estimate, and say when a deal ends. Each price is labeled ad, shelf, student or estimate, and a store that blocks Cubbie is skipped and named.
 
 ## Replies
 
@@ -62,10 +64,12 @@ Setup: none (Python 3.9+, standard library only).
 
 Run them from this skill's folder. Write the scratch files to `~/.config/stretch/work/` (`mkdir -p` it first), which keeps them across conversations; they are working copies and memory stays the source of truth. Always pass `--today` as today's date in the student's saved time zone; the sandbox clock may differ.
 
-- This week's real store prices: `python3 scripts/fetch_deals.py --zip <ZIP> --stores "<store>,<store>" --today <YYYY-MM-DD> --out ~/.config/stretch/work/deals.json`. It reads the stores' current weekly ads from Flipp's public ad search over HTTPS and keeps only prices it can match to a recipe item and package size. Exit 0 means deals.json is written (it may hold few deals; `NO_AD_PRICE` lists the items without one). Exit 2 means a bad input. Exit 5 means the ad service could not be reached; then read the ad pages yourself as `references/weekly-autopilot.md` describes. It sends only the ZIP and grocery item names, nothing about the student.
+- This week's real store prices: `python3 scripts/fetch_deals.py --zip <ZIP> --stores "<store>,<store>" --today <YYYY-MM-DD> --out ~/.config/stretch/work/deals.json`. It reads the stores' current weekly ads from Flipp's public ad search over HTTPS and keeps only prices it can match to a recipe item and package size. Exit 0 means deals.json is written (it may hold few deals; `NO_AD_PRICE` lists the items without one). Exit 2 means a bad input. Exit 5 means the ad service could not be reached; then use the shelf-price step in references/weekly-autopilot.md. It sends only the ZIP and grocery item names, nothing about the student.
 - Meal plan: `python3 scripts/plan_meals.py --profile ~/.config/stretch/work/profile.json --deals ~/.config/stretch/work/deals.json --today <YYYY-MM-DD>`. Add `--json` for full details and `--exclude <recipe-id>` to drop a recipe the student does not want. Exit 0 means a plan is ready. Exit 2 means a bad or missing input (the output explains). Exit 3 means nothing in the recipe library fits the kitchen and diet. Exit 4 means even the cheapest plan is over budget; the plan is printed anyway.
 - Gear payback: `python3 scripts/payback.py --profile ~/.config/stretch/work/profile.json --home-meal-cost <dollars> --banned <comma-separated gear ids>`. Exit 0 or 2.
-- `--sample` runs either script on bundled fake data and never touches saved files.
+- Shelf and student prices: `python3 scripts/merge_prices.py --deals ~/.config/stretch/work/deals.json --shelf ~/.config/stretch/work/shelf_prices.json --today <YYYY-MM-DD> --out ~/.config/stretch/work/deals.json`. It checks the prices Cubbie read on store sites or the student sent, drops any that look wrong and says why, and merges the rest into deals.json. Exit 0 means merged (`NO_REAL_PRICE` lists items still without a real price). Exit 2 means a bad file; the ERROR line says what to fix.
+- Monthly tally: `python3 scripts/tally.py --receipts ~/.config/stretch/work/receipts.json`. Exit 0 means a summary and a SAVE line are printed. Exit 2 means a bad file; the ERROR line says what to fix. It writes nothing.
+- `--sample` runs any script on bundled fake data and never touches saved files.
 
 How to read the results:
 
