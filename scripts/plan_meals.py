@@ -37,6 +37,24 @@ def terms(d):
     return None
 
 
+# Library items an ad may stand in for with a different cut: (word in the ad, plural label). A label is
+# needed unless the ad names only cuts in OK_ALONE, so a drumstick ad is never shown as thighs.
+CUTS = {"chicken thighs": ("chicken", [("drumstick", "drumsticks"), ("thigh", "thighs"), ("leg quarter", "leg quarters")],
+                           {"thigh", "leg quarter"})}
+
+
+def ad_label(item, ad_text):
+    """What the ad is actually for ("chicken, drumsticks or thighs"), or the library item's own name."""
+    if item not in CUTS or not ad_text:
+        return item
+    base, cuts, ok_alone = CUTS[item]
+    text = str(ad_text).lower()
+    found = sorted((text.find(word), word, label) for word, label in cuts if word in text)
+    if not found or {word for _, word, _ in found} <= ok_alone:
+        return item
+    return f"{base}, " + " or ".join(label for _, _, label in found)
+
+
 def parse_day(text, label):
     try:
         return date.fromisoformat(str(text))
@@ -57,6 +75,7 @@ def build_price_book(typical, deals, today):
         book[name] = {
             "unit": info["unit"], "pack": pack, "unit_price": float(info["pack_price"]) / pack,
             "loose": bool(info.get("loose", False)), "source": "estimate", "store": None, "terms": None,
+            "label": name,
         }
     notes = []
     for d in deals:
@@ -89,7 +108,8 @@ def build_price_book(typical, deals, today):
             continue  # keep the cheaper deal
         loose = bool(d.get("loose", current["loose"]))
         book[name] = {"unit": base_unit, "pack": pack_in_base, "unit_price": unit_price, "loose": loose,
-                      "source": source, "store": d.get("store"), "terms": terms(d)}
+                      "source": source, "store": d.get("store"), "terms": terms(d),
+                      "label": ad_label(name, d.get("ad_text"))}
     return book, notes
 
 
@@ -181,7 +201,7 @@ def build_result(profile, deals, today, recipes_doc, typical, exclude=frozenset(
         entry = book[item]
         shopping.append({"item": item, "buy": round(buy, 3), "unit": entry["unit"], "packs": packs,
                          "cost": round(c, 2), "source": entry["source"], "store": entry["store"],
-                         "terms": entry["terms"]})
+                         "terms": entry["terms"], "label": entry["label"]})
         (estimated if entry["source"] == "estimate" else from_deals).append(item)
     sources = {k: sum(1 for s in shopping if s["source"] == k) for k in ("ad", "shelf", "student", "estimate")}
     for rid in combo:
@@ -231,7 +251,7 @@ def render_text(r):
         where = f"{label} at {it['store']}" if it["store"] and it["source"] != "estimate" else label
         if it["terms"] and it["source"] != "estimate":
             where += f", {it['terms']}"
-        lines.append(f"- {qty_text(it['buy'], it['unit'])} {it['item']}: {money(it['cost'])} ({where})")
+        lines.append(f"- {qty_text(it['buy'], it['unit'])} {it['label']}: {money(it['cost'])} ({where})")
     ps = r["price_sources"]
     lines.append(f"Real prices: {len(r['shopping_list']) - ps['estimate']} of {len(r['shopping_list'])} lines "
                  f"(ad {ps['ad']}, shelf {ps['shelf']}, student {ps['student']}); estimates: {ps['estimate']}.")
