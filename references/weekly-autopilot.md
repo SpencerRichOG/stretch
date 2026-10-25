@@ -79,6 +79,15 @@ Reply 1 build cart, 2 edit, 3 skip.
 - "2": ask what to change (a recipe they dislike, a lower budget, a store). Rerun `plan_meals.py`, using `--exclude` for a recipe they do not want or a changed profile for a new budget, and send the new plan in the same format.
 - "3": do nothing, keep the schedule, and say you will be back next Sunday.
 
+## Delivery price check
+
+Only when the student has a delivery habit. Compare one typical order with the planned home meal, in one short line. Delivery apps are only a comparison, never a price source for groceries.
+
+- Prices come from the student, who types or screenshots the restaurant's menu price and the fees shown before checkout, or from the restaurant's public menu page on DoorDash or Uber Eats, opened once in the browser without signing in.
+- If the site asks for an address or sign-in, or shows a robot check, stop and ask the student for a screenshot instead.
+- Label it "menu price plus fees as shown, about", for example "That $14 bowl was about $21 with fees; tonight's home meal is about $1.70."
+- Never place an order, never start a membership or trial, and never sign in for the student.
+
 ## Building the cart
 
 Use the cart site the student saved (default Walmart.com, with pickup or delivery; Instacart and DoorDash are options for students elsewhere). Do this only after the student replies 1.
