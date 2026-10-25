@@ -24,6 +24,7 @@ from stretchlib import (ASSETS, StretchError, convert, fail, feasible_recipes, l
 
 SAMPLE_TODAY = "2026-10-25"
 FAMILY_REPEAT_PENALTY = 2.00  # dollars of "cost" charged per repeated recipe family (keeps the week varied)
+SOURCE_LABELS = {"ad": "ad deal", "shelf": "shelf price", "student": "student price", "estimate": "estimate"}
 
 
 def parse_day(text, label):
@@ -63,6 +64,9 @@ def build_price_book(typical, deals, today):
             raise StretchError(f"The deal for '{raw}' needs a numeric price and size.")
         if price <= 0 or size <= 0:
             raise StretchError(f"The deal for '{raw}' needs a price and size above zero.")
+        source = str(d.get("source") or "ad").strip().lower()
+        if source not in ("ad", "shelf", "student"):
+            raise StretchError(f"The deal for '{raw}' has an unknown source '{source}' (use ad, shelf or student).")
         until = d.get("valid_until")
         if until and parse_day(until, f"valid_until for '{raw}'") < today:
             notes.append(f"Skipped the expired deal for {name} (ended {until}).")
@@ -71,11 +75,11 @@ def build_price_book(typical, deals, today):
         pack_in_base = convert(size, d.get("unit") or base_unit, base_unit)
         unit_price = price / pack_in_base
         current = book[name]
-        if current["source"] == "deal" and current["unit_price"] <= unit_price:
+        if current["source"] != "estimate" and current["unit_price"] <= unit_price:
             continue  # keep the cheaper deal
         loose = bool(d.get("loose", current["loose"]))
         book[name] = {"unit": base_unit, "pack": pack_in_base, "unit_price": unit_price, "loose": loose,
-                      "source": "deal", "store": d.get("store")}
+                      "source": source, "store": d.get("store")}
     return book, notes
 
 
@@ -167,7 +171,8 @@ def build_result(profile, deals, today, recipes_doc, typical, exclude=frozenset(
         entry = book[item]
         shopping.append({"item": item, "buy": round(buy, 3), "unit": entry["unit"], "packs": packs,
                          "cost": round(c, 2), "source": entry["source"], "store": entry["store"]})
-        (from_deals if entry["source"] == "deal" else estimated).append(item)
+        (estimated if entry["source"] == "estimate" else from_deals).append(item)
+    sources = {k: sum(1 for s in shopping if s["source"] == k) for k in ("ad", "shelf", "student", "estimate")}
     for rid in combo:
         for p in by_id[rid].get("pantry", []):
             if p not in pantry:
@@ -188,7 +193,7 @@ def build_result(profile, deals, today, recipes_doc, typical, exclude=frozenset(
         "left": round(float(budget) - cost, 2), "meals_needed": meals_needed, "meals_covered": meals_covered,
         "home_cost_per_meal": round(cost / meals_needed, 2),
         "sessions": sessions, "shopping_list": shopping, "deal_items": from_deals, "estimated_items": estimated,
-        "pantry_assumed": pantry, "swap": swap, "notes": notes, "recipes_considered": len(feasible),
+        "price_sources": sources, "pantry_assumed": pantry, "swap": swap, "notes": notes, "recipes_considered": len(feasible),
     }
     d = profile.get("delivery") or {}
     if isinstance(d.get("avg_order"), (int, float)) and d["avg_order"] > 0:
@@ -211,8 +216,12 @@ def render_text(r):
         lines.append(f"{s['label']} ({s['day']}): {names}")
     lines.append("Shopping list:")
     for it in r["shopping_list"]:
-        where = f"{it['store']} deal" if it["source"] == "deal" and it["store"] else ("deal" if it["source"] == "deal" else "estimate")
+        label = SOURCE_LABELS[it["source"]]
+        where = f"{label} at {it['store']}" if it["store"] and it["source"] != "estimate" else label
         lines.append(f"- {qty_text(it['buy'], it['unit'])} {it['item']}: {money(it['cost'])} ({where})")
+    ps = r["price_sources"]
+    lines.append(f"Real prices: {len(r['shopping_list']) - ps['estimate']} of {len(r['shopping_list'])} lines "
+                 f"(ad {ps['ad']}, shelf {ps['shelf']}, student {ps['student']}); estimates: {ps['estimate']}.")
     if r["estimated_items"]:
         lines.append("Priced from typical prices, not a store deal: " + ", ".join(r["estimated_items"]) + ".")
     if r["pantry_assumed"]:

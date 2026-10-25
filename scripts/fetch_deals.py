@@ -80,6 +80,14 @@ ITEMS = {
     "tofu": {"q": "tofu", "words": ["tofu"], "bad": ["dessert", "noodle", "skin", "puff"], "fallback": (1, "each")},
 }
 
+# Common names a student types -> a fragment of the merchant name Flipp's ads use (seen live for ZIP 85281 on
+# 2026-10-24: "ALDI", "Walmart", "Target", "Fry's Food Stores", "CVS Pharmacy", "Sprouts Farmers Market", "Safeway").
+STORE_ALIASES = {
+    "aldi": "aldi", "walmart": "walmart", "wal-mart": "walmart", "walmart supercenter": "walmart", "target": "target",
+    "frys": "fry's", "fry's": "fry's", "fry's food stores": "fry's", "frys food stores": "fry's", "fry's food": "fry's",
+    "cvs": "cvs", "cvs pharmacy": "cvs", "sprouts": "sprouts", "sprouts farmers market": "sprouts", "safeway": "safeway",
+}
+
 UNIT_WORDS = {
     "lb": "lb", "lbs": "lb", "pound": "lb", "pounds": "lb", "oz": "oz", "ounce": "oz", "ounces": "oz",
     "fl oz": "floz", "fl. oz": "floz", "kg": "kg", "g": "g", "ct": "ct", "count": "ct", "pk": "ct", "pack": "ct",
@@ -242,6 +250,7 @@ def main():
         except ValueError:
             raise StretchError(f"--today must look like 2026-10-25 (got '{args.today}').")
         wanted = [s.strip().lower().replace("’", "'") for s in args.stores.split(",") if s.strip()]
+        wanted = [STORE_ALIASES.get(s, s) for s in wanted]
         items = [s.strip().lower() for s in args.items.split(",") if s.strip()] or list(ITEMS)
         unknown = [i for i in items if i not in ITEMS]
         if unknown:

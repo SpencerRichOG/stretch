@@ -4,12 +4,17 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 
 ## Steps
 
-1. Read the student's saved stores, weekly food budget, diet, dislikes, kitchen, memberships and delivery habit from memory. If the stores, budget or kitchen are missing, send one question for the missing piece and stop.
-2. Find this week's deals. Run `fetch_deals.py` first (see "Running the scripts" in SKILL.md) with the student's ZIP, their saved stores (at most two) and their local date. It pulls real prices from the stores' current weekly ads and writes `~/.config/stretch/work/deals.json` itself, so do not edit that file afterward. Quote store names and prices from its output exactly.
-   - Exit 0 with some `DEALS`: go on. Items listed under `NO_AD_PRICE` are not on sale this week; the plan uses typical prices for them and marks them estimates.
-   - Exit 0 with zero deals for the saved stores: rerun once without `--stores` to see every store near the ZIP. If another store has better prices, mention it in one line, but plan with the student's own stores unless they say otherwise.
-   - Exit 5 (the ad service could not be reached): fall back to the old way. For each saved store, search the web for its current weekly ad near the student's ZIP, open it, and record only prices you actually read, for items in the recipe library (the keys of `assets/typical_prices.json`). Write them to `deals.json` (format below). If a store's ad cannot be read, skip it, use typical prices, and say so in the message.
-   - Some prices need the store's loyalty card or a digital coupon (the output says "with card" or "with coupon"). Say so in a few words when you quote one.
+1. Read the student's saved stores, weekly food budget, diet, dislikes, kitchen, memberships and delivery habit from memory. A missing store list never stops the plan: with no saved stores, use Fry's and Walmart at ZIP 85281 if the school is ASU or unknown (elsewhere, the student's ZIP and no store filter), and say so in one line, for example "I used Fry's and Walmart near ASU; tell me your stores to change that." If the weekly budget or the kitchen is truly missing and the student did not just give it, ask one short question for only that piece, then continue once they answer. A one-off amount ("$41 until Friday") is for this run only and is never saved as the weekly budget; see `days` in `references/onboarding.md`.
+2. Find real prices, best source first. Go to the next tier only for items that still have no real price.
+   - Tier 1, weekly ads. Run `fetch_deals.py` (see "Running the scripts" in SKILL.md) with the student's ZIP, their saved stores (at most three; with none saved, the defaults from step 1) and their local date. It writes `~/.config/stretch/work/deals.json` itself; never type prices into that file. Quote store names and prices from its output exactly. Some prices need the store's card or a digital coupon (the output says "with card" or "with coupon"); say so in a few words when you quote one.
+     - Exit 0 with zero deals for the saved stores: rerun once without `--stores` to see every store near the ZIP. If another store has better prices, mention it in one line, but plan with the student's own stores unless they say otherwise.
+     - Exit 5 (the ad service could not be reached): go on to Tier 2 for every item.
+   - Tier 2, shelf prices. Do this as a background task. For the items still listed under `NO_AD_PRICE` (every item after exit 5), look up the regular price on each saved store's own public website, one store at a time. Start with the items that are the biggest part of the plan's cost, and do at most about 12 lookups per store and about 25 in all. For each item, search the web for "<store> <item> price <ZIP>", or open the store's public product search page in the browser (address patterns are in `assets/store_sites.json`; for a store not listed there, use its "generic" entry). Read only what the page shows: the price, the package size and unit, the store location or "online price" label, and the page address. Choose the plain store-brand or cheapest regular item in a normal size.
+     - If a store's site shows a robot check, a sign-in wall or a location prompt that needs sign-in, stop after that one try for that store, note it as blocked, and go on with the other stores. Never retry, never sign in for the student, and never work around a check.
+     - Never write down a price you did not see on the page. Leaving an item out is better than guessing.
+     - Write what you saw to `~/.config/stretch/work/shelf_prices.json` (format below), then run `python3 scripts/merge_prices.py --deals ~/.config/stretch/work/deals.json --shelf ~/.config/stretch/work/shelf_prices.json --today <YYYY-MM-DD> --out ~/.config/stretch/work/deals.json`. It drops rows that look wrong and prints why; do not add them back. `NO_REAL_PRICE` lists the items that still have no real price.
+   - Tier 3, the student. For at most the 3 costliest items under `NO_REAL_PRICE`, add one line to the plan message: "Can you text me a photo of the price tag or your cart total for X?" Read the photo, or accept a typed price. Add each price to shelf_prices.json with "kind": "student" and today's date, rerun merge_prices.py and plan_meals.py, and send the updated total. Ask once a week at most.
+   - Tier 4, estimates. Everything else uses typical prices, and plan_meals.py labels those lines "estimate".
 3. Write `profile.json` from memory (see `references/onboarding.md`), then run `plan_meals.py` with the student's local date (see "Running the scripts" in SKILL.md). Use `--json` once so you also have `home_cost_per_meal` for the gear ranking.
 4. Handle the exit code as SKILL.md describes.
 5. Send one message (format below).
@@ -33,7 +38,23 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 - Meat and produce sold by weight are priced per pound. Packaged goods are priced per package (a 2 lb bag of rice at $2.00 is size 2, unit lb, price 2.00).
 - If two stores both list an item, put both in; the script keeps the cheaper one and records the store.
 - Do not copy a price you did not see. Leaving an item out is better than guessing.
-- `fetch_deals.py` also adds `ad_text` (the ad's wording) and `condition` ("with card"); `plan_meals.py` ignores them.
+- `fetch_deals.py` also adds `ad_text` (the ad's wording) and `condition` ("with card"); `plan_meals.py` ignores them. `merge_prices.py` adds `source` (ad, shelf or student), `url` and `note`.
+
+## shelf_prices.json
+
+Cubbie writes this file only from prices it saw on a store's page (kind "shelf") or that the student sent (kind "student").
+
+```json
+{"prices": [
+  {"store": "Walmart", "item": "eggs", "price": 2.98, "size": 12, "unit": "each", "seen_on": "2026-10-24",
+   "url": "https://www.walmart.com/...", "kind": "shelf", "note": "online price, pickup at Tempe"}
+]}
+```
+
+- `item` is a recipe-library name (the keys of `assets/typical_prices.json`). `size` and `unit` work as in deals.json.
+- `seen_on` is the date the price was read. Rows older than 4 days are dropped.
+- `url` is the page address; leave it out for a student photo. `note` says "online price" or the store location, plus "with card" if it is a member price.
+- Never put card or account numbers in this file. merge_prices.py refuses any file that contains one.
 
 ## The message
 
@@ -49,7 +70,7 @@ Reply 1 build cart, 2 edit, 3 skip.
 
 - Include the swap idea only if the script returned one.
 - Mention the delivery comparison only if the student has a delivery habit, and only as one short line.
-- If some items are estimates, add "a few prices are estimates" in one short line.
+- Add one short line on where prices came from, taken from the plan's "Real prices" line, for example "9 of 12 prices are real (store ads, store sites or your photo); 3 are estimates." If a store blocked the lookup, add half a line: "Walmart's site blocked me, so its items are estimates."
 - The full shopping list is not in the first message. Send it when the student replies 2 or asks for it, as plain lines.
 
 ## Replies
