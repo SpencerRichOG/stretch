@@ -26,7 +26,7 @@ If the student asks something Stretch covers but has no saved profile, do not fo
 Cubbie's memory is the source of truth. The scripts cannot read memory, so each run Cubbie turns the saved facts into a `profile.json` (format in `references/onboarding.md`) and passes the file in. Save each fact in plain words with its label:
 
 - Stretch university: school, campus, housing (dorm or off-campus), ZIP, car or no car
-- Stretch stores: the stores the student actually uses (grocery, campus market, dining) and cart site (default Walmart.com)
+- Stretch stores: the stores the student actually uses (grocery, campus market, dining) and cart site (default Target.com, pickup or same-day delivery; Walmart.com or Instacart if the student picks one)
 - Stretch memberships: delivery and shopping memberships (DoorDash, Uber One, Instacart, Prime, meal plan) and delivery habit (orders a week, typical order cost)
 - Stretch weekly food budget, diet, dislikes, cooking skill
 - Stretch kitchen: the equipment the student has
