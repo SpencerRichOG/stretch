@@ -26,6 +26,8 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 
 ## deals.json
 
+Example only, made-up numbers; always use the numbers from the script output (fetch_deals.py writes this file):
+
 ```json
 {
   "deals": [
@@ -47,6 +49,8 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 
 Cubbie writes this file only from prices it saw on a store's page (kind "shelf") or that the student sent (kind "student").
 
+Example only, not a current price; write only prices you saw on the page or the student sent:
+
 ```json
 {"prices": [
   {"store": "Target", "item": "eggs", "price": 1.49, "size": 12, "unit": "each", "seen_on": "2026-10-24",
@@ -61,7 +65,7 @@ Cubbie writes this file only from prices it saw on a store's page (kind "shelf")
 
 ## The message
 
-One message, plain text, lead with the total:
+One message, plain text, lead with the total. Example only, made-up numbers; always use the numbers from the script output:
 
 ```text
 This week's plan: $23.40 of your $41.
@@ -73,7 +77,7 @@ Reply 1 build cart, 2 edit, 3 skip.
 
 - Include the swap idea only if the script returned one.
 - Mention the delivery comparison only if the student has a delivery habit, and only as one short line.
-- Add one short line on where prices came from, taken from the plan's "Real prices" line, for example "9 of 12 prices are real (store ads, store sites or your photo); 3 are estimates." If a store blocked the lookup, add half a line: "Walmart's site blocked me; its items are estimates until you send a price."
+- Add one short line on where prices came from, taken from the plan's "Real prices" line, for example (made-up counts) "9 of 12 prices are real (store ads, store sites or your photo); 3 are estimates." If a store blocked the lookup, add half a line: "Walmart's site blocked me; its items are estimates until you send a price."
 - The full shopping list is not in the first message. Send it when the student replies 2 or asks for it, as plain lines.
 
 ## Replies
@@ -88,7 +92,7 @@ Only when the student has a delivery habit. Compare one typical order with the p
 
 - Prices come from the student, who types or screenshots the restaurant's menu price and the fees shown before checkout, or from the restaurant's public menu page on DoorDash or Uber Eats, opened once in the browser without signing in.
 - If the site asks for an address or sign-in, or shows a robot check, stop and ask the student for a screenshot instead.
-- Label it "menu price plus fees as shown, about", for example "That $14 bowl was about $21 with fees; tonight's home meal is about $1.70."
+- Label it "menu price plus fees as shown, about", for example (made-up numbers) "That $14 bowl was about $21 with fees; tonight's home meal is about $1.70."
 - Never place an order, never start a membership or trial, and never sign in for the student.
 
 ## Building the cart

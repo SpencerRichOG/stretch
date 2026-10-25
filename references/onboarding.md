@@ -23,7 +23,7 @@ Run this the first time a student uses Stretch. It takes about five minutes over
 
 One short summary text, then create the weekly check-in.
 
-Example:
+Example only, made-up numbers; always use the student's own answers:
 
 ```text
 Here's your Money Map:
