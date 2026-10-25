@@ -28,6 +28,7 @@ Before recording:
 1. Use a test Cubbie conversation with made-up data only. Do not connect a real Gmail. When Stretch asks to connect Gmail, decline and type the subscriptions (Stretch supports this). No real inbox appears at any point.
 2. Install the Skill from the repository link and finish setup off camera, so take 1 goes straight to a plan (see section 3).
 3. Hero kitchen: "microwave, stove, pan and pot". Pan recipes need a stove, so a pan-and-microwave kitchen may get no chicken plan. Run take 1 once off camera to check that it gives a full plan.
+   Rerun the plan right before recording: weekly ads change, so the total and the "Real prices" line can differ from any earlier run. Use only the numbers in the recorded reply.
 4. Turn on Do Not Disturb (Control Center > Focus > Do Not Disturb). Clear all notifications. Turn off message previews for other apps if any still come through.
 5. Close other apps. Check the screen for: other iMessage threads, contact names, your phone number, email addresses, real bank or card apps, location, photos. None of these may appear.
 6. Settings > Display & Brightness > Text Size: bump it up one or two steps so replies are readable on a phone screen.
@@ -51,7 +52,7 @@ Setup (off camera, made-up student):
 1. `https://github.com/SpencerRichOG/stretch`
 2. `yes` (lets Cubbie fetch and install the Skill)
 3. In a new message: `set up Stretch`
-4. Answer setup questions with the made-up profile: ASU Tempe, dorm, ZIP 85281, no car, Fry's and Walmart, kitchen `microwave, stove, pan and pot`, no diet limits, weekly food budget $41, Sunday check-in at 6 pm Arizona time.
+4. Answer setup questions with the made-up profile: ASU Tempe, dorm, ZIP 85281, no car, ALDI, Target, Fry's and Safeway (the stores with real weekly-ad prices near ASU; cart site Walmart.com), kitchen `microwave, stove, pan and pot`, no diet limits, weekly food budget $41, Sunday check-in at 6 pm Arizona time.
 5. When asked to connect Gmail: `no thanks, I'll type them`, then `Spotify Premium $12.99 a month, an AI chatbot plan $20 a month, and a gym near campus $30 a month`
 
 Takes (on camera, each in a new message):

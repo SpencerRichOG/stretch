@@ -112,6 +112,24 @@ def feasible_recipes(recipes, profile, extra_equipment=()):
     return out
 
 
+# Library items an ad may stand in for with a different cut: (word in the ad, plural label). A label is
+# needed unless the ad names only the cuts in the last set, so a drumstick ad is never shown as thighs.
+CUTS = {"chicken thighs": ("chicken", [("drumstick", "drumsticks"), ("thigh", "thighs"), ("leg quarter", "leg quarters")],
+                           {"thigh", "leg quarter"})}
+
+
+def ad_label(item, ad_text):
+    """What the ad is actually for ("chicken, drumsticks or thighs"), or the library item's own name."""
+    if item not in CUTS or not ad_text:
+        return item
+    base, cuts, ok_alone = CUTS[item]
+    text = str(ad_text).lower()
+    found = sorted((text.find(word), word, label) for word, label in cuts if word in text)
+    if not found or {word for _, word, _ in found} <= ok_alone:
+        return item
+    return f"{base}, " + " or ".join(label for _, _, label in found)
+
+
 def fail(message, code=2):
     print(f"ERROR: {message}")
     sys.exit(code)

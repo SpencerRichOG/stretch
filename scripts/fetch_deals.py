@@ -5,11 +5,13 @@ Reading weekly-ad pages in a browser is slow and often blocked, so this script a
 public weekly-ad search (the data behind flipp.com, HTTPS JSON, no key) for each item in the
 recipe library and keeps only prices it can tie to a library item and a package size.
 
-  python3 scripts/fetch_deals.py --zip 85281 --stores "Fry's,Walmart" --today 2026-10-25 --out deals.json
+  python3 scripts/fetch_deals.py --zip 85281 --stores "ALDI,Target,Fry's,Safeway" --today 2026-10-25 --out deals.json
   python3 scripts/fetch_deals.py --sample      # bundled saved response, no network, touches nothing
 
 Every price written is one the store's ad shows. An item whose size cannot be read from the ad
 is left out rather than guessed, so plan_meals.py falls back to a typical price and labels it.
+A few items are searched under a second phrasing too ("chicken drumsticks"). A --stores name
+with no usable ad price gets one WARNING line (a misspelled store name says so).
 
 Exit codes: 0 deals written (possibly none), 2 bad input, 5 could not reach the ad service.
 """
@@ -24,7 +26,7 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from stretchlib import ASSETS, StretchError, convert, fail, load_json
+from stretchlib import ASSETS, StretchError, ad_label, convert, fail, load_json
 
 SEARCH_URL = "https://backflipp.wishabi.com/flipp/items/search"
 SAMPLE_FILE = ASSETS / "sample_flipp.json"
@@ -33,9 +35,10 @@ SAMPLE_TODAY = "2026-10-25"
 # How to find each library item in an ad. "words" must all appear (as word starts) in the ad text,
 # "any" lists alternatives where at least one must appear, "bad" rejects look-alikes.
 # "fallback" is a package size used only when the ad names the item but not its size, and only for
-# items sold in one standard size (a dozen eggs, a 15 oz can).
+# items sold in one standard size (a dozen eggs, a 15 oz can). "also" lists extra search phrasings.
 ITEMS = {
-    "chicken thighs": {"q": "chicken thighs", "words": ["chicken"], "any": ["thigh", "drumstick", "leg quarter"],
+    "chicken thighs": {"q": "chicken thighs", "also": ["chicken thigh", "chicken drumsticks"],
+                       "words": ["chicken"], "any": ["thigh", "drumstick", "leg quarter"],
                        "bad": ["breaded", "nugget", "cooked", "rotisserie", "wing", "breast", "boneless skinless breast",
                                "frozen fried", "sausage", "broth", "soup", "dog", "cat"]},
     "ground turkey": {"q": "ground turkey", "words": ["ground", "turkey"], "bad": ["sausage", "jerky", "deli", "burger patties"]},
@@ -46,7 +49,7 @@ ITEMS = {
                                                      "noodle", "bowl", "cauliflower", "pudding", "cereal", "chex", "wine",
                                                      "milk", "cracker", "side", "seasoned", "spanish", "fried", "mexican"]},
     "pasta": {"q": "pasta", "any": ["pasta", "spaghetti", "penne", "macaroni", "rotini", "elbows"],
-              "bad": ["sauce", "salad", "cheese", "kit", "dinner", "frozen", "fresh", "ravioli", "tortellini", "helper"],
+              "bad": ["sauce", "salad", "cheese", "kit", "dinner", "frozen", "fresh", "ravioli", "tortellini", "helper", "side"],
               "fallback": (1, "lb")},
     "pasta sauce": {"q": "pasta sauce", "any": ["pasta sauce", "marinara", "spaghetti sauce"],
                     "bad": ["alfredo", "pesto", "vodka"], "fallback": (1, "each")},
@@ -60,7 +63,7 @@ ITEMS = {
     "tortillas": {"q": "tortillas", "words": ["tortilla"], "bad": ["chip", "strips", "soup", "kit", "bowl"]},
     "shredded cheese": {"q": "shredded cheese", "words": ["shredded"], "any": ["cheese", "cheddar", "mozzarella", "blend"],
                         "bad": ["plant", "dairy free"]},
-    "salsa": {"q": "salsa", "words": ["salsa"], "bad": ["chip", "verde chicken", "seasoning", "mix", "dip"],
+    "salsa": {"q": "salsa", "words": ["salsa"], "bad": ["chip", "verde chicken", "seasoning", "mix", "dip", "de tomate"],
               "fallback": (1, "each")},
     "frozen broccoli": {"q": "frozen broccoli", "words": ["broccoli"], "any": ["frozen", "steam", "florets"],
                         "bad": ["cheese sauce", "rice", "fresh", "crown", "slaw"]},
@@ -74,8 +77,8 @@ ITEMS = {
                                                            "frozen", "skins", "soup", "bread", "rolls"]},
     "peanut butter": {"q": "peanut butter", "words": ["peanut", "butter"], "bad": ["cup", "cookie", "cracker", "bar",
                                                                                    "candy", "powder", "pretzel", "filled"]},
-    "canned tuna": {"q": "canned tuna", "words": ["tuna"], "bad": ["steak", "fillet", "sushi", "fresh", "kit", "salad",
-                                                                   "pouch", "frozen"],
+    "canned tuna": {"q": "canned tuna", "also": ["tuna"], "words": ["tuna"],
+                    "bad": ["steak", "fillet", "sushi", "fresh", "kit", "salad", "pouch", "frozen"],
                     "fallback": (1, "can")},
     "tofu": {"q": "tofu", "words": ["tofu"], "bad": ["dessert", "noodle", "skin", "puff"], "fallback": (1, "each")},
 }
@@ -112,10 +115,19 @@ def matches(name, rule):
     return not alts or any(has_word(name, w) for w in alts)
 
 
+def part_for_item(name, rule):
+    """In a multi-product ad ("Tomatoes 14.5-15 oz., Rice 16 oz. or Beans 15 oz."), the one part naming this item."""
+    parts = [p.strip() for p in re.split(r",|;|\bor\b", name) if matches(p.strip(), rule)]
+    return parts[0] if len(parts) == 1 else None
+
+
 def read_size(name, rule):
     """(size, unit) from the ad text, or the item's standard size, or None if it cannot be told."""
-    if RANGE_RE.search(name):
-        return None  # "14.5-15 oz" style ranges cover several products; do not guess which one
+    if RANGE_RE.search(name) or len(SIZE_RE.findall(name)) > 1:
+        part = part_for_item(name, rule)
+        if not part or RANGE_RE.search(part) or len(SIZE_RE.findall(part)) != 1:
+            return None  # a size range or several products, and no one part names this item with one size
+        name = part
     sizes = SIZE_RE.findall(name)
     if len(sizes) == 1:
         amount, word = sizes[0]
@@ -144,6 +156,8 @@ def per_unit_price(raw):
         return None  # "buy 2 get 1" and similar; the real per-item price is not clear
     if "%" in post or "off" in post.split():
         return None  # a discount, not a price
+    if re.search(r"\b(cs|case)\b", post):
+        return None  # sold only by the case (Restaurant Depot style); not a price for one package
     per_lb = bool(re.search(r"(^|/|\b)lbs?\b", post))
     return round(price, 2), per_lb, post
 
@@ -163,6 +177,10 @@ def local_day(stamp, offset_hours):
 def store_match(merchant, wanted):
     m = merchant.lower().replace("’", "'")
     return not wanted or any(w in m for w in wanted)
+
+
+def store_match_any(merchants, wanted_one):
+    return any(store_match(m, [wanted_one]) for m in merchants if m)
 
 
 def deals_from_items(item_name, raw_items, wanted_stores, today, offset_hours, typical):
@@ -217,6 +235,14 @@ def deals_from_items(item_name, raw_items, wanted_stores, today, offset_hours, t
     return [row for _, row in sorted(best.values(), key=lambda t: t[0])]
 
 
+def deal_line(d):
+    """One printed DEALS line, naming what the ad is for when it differs from the library item ("chicken, drumsticks")."""
+    cond = f" ({d['condition']})" if d.get("condition") else ""
+    ends = f", ends {d['valid_until']}" if d.get("valid_until") else ""
+    return (f"- {ad_label(d['item'], d.get('ad_text'))}: ${d['price']:.2f} for {d['size']:g} {d['unit']} "
+            f"at {d['store']}{cond}{ends}")
+
+
 def fetch_item(query, zip_code, timeout):
     params = urllib.parse.urlencode({"locale": "en-us", "postal_code": zip_code, "q": query})
     req = urllib.request.Request(f"{SEARCH_URL}?{params}", headers={
@@ -260,10 +286,21 @@ def main():
         fail(str(e), 2)
         return
 
-    deals, missing, failures = [], [], 0
+    deals, missing, failures, merchants = [], [], 0, set()
     for item in items:
         try:
-            raw = sample.get(item, []) if sample is not None else fetch_item(ITEMS[item]["q"], args.zip, args.timeout)
+            if sample is not None:
+                raw = sample.get(item, [])
+            else:
+                raw, seen = [], set()
+                for q in [ITEMS[item]["q"]] + ITEMS[item].get("also", []):
+                    for hit in fetch_item(q, args.zip, args.timeout):
+                        key = (hit.get("merchant_name"), hit.get("name"), hit.get("current_price"))
+                        if key not in seen:
+                            seen.add(key)
+                            raw.append(hit)
+                    time.sleep(0.2)
+            merchants.update(str(h.get("merchant_name") or h.get("merchant") or "") for h in raw)
         except (urllib.error.URLError, OSError, ValueError) as e:
             failures += 1
             missing.append(item)
@@ -275,8 +312,6 @@ def main():
             deals.extend(found)
         else:
             missing.append(item)
-        if sample is None:
-            time.sleep(0.2)
 
     if failures and failures == len(items):
         fail("Could not reach the weekly-ad service. Read the store ad pages instead.", 5)
@@ -293,9 +328,15 @@ def main():
     print(f"DEALS: {len(deals)} real ad prices for {len({d['item'] for d in deals})} of {len(items)} items"
           + (f" from {', '.join(stores)}." if stores else "."))
     for d in deals[:25]:
-        cond = f" ({d['condition']})" if d.get("condition") else ""
-        ends = f", ends {d['valid_until']}" if d.get("valid_until") else ""
-        print(f"- {d['item']}: ${d['price']:.2f} for {d['size']:g} {d['unit']} at {d['store']}{cond}{ends}")
+        print(deal_line(d))
+    for w in wanted:
+        if any(store_match(d["store"], [w]) for d in deals):
+            continue
+        if w in STORE_ALIASES.values() or store_match_any(merchants, w):
+            print(f"WARNING: no usable ad prices from '{w}' near {args.zip} this week.")
+        else:
+            print(f"WARNING: unknown store '{w}' matched no ad near {args.zip}; check the spelling "
+                  "(known: Aldi, Walmart, Target, Frys, CVS, Sprouts, Safeway).")
     if missing:
         print("NO_AD_PRICE: " + ", ".join(missing) + " (plan_meals.py will use typical prices and mark them estimates).")
     if failures:
