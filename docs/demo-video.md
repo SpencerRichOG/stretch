@@ -16,7 +16,7 @@ Changes from the spec:
 | 3-10 s | Screen recording: the student types to Cubbie "I have $41 until Friday and nothing in my fridge." and sends it. | "So I texted Cubbie." | "So I texted Cubbie." |
 | 10-20 s | Screen recording: Stretch's reply scrolls in (this week's deals, the prep plan, the total). Zoom in on the total line. | "[TOTAL] / [BUDGET]" then "[DAYS] days of food" | "It found this week's deals near campus and planned [DAYS] days of food for [TOTAL]." |
 | 20-26 s | Screen recording: the perks reply line "Spotify student plan: $6.99/mo vs $12.99, saves about $72/yr." Zoom in on it. | "+ about $72/yr" | "Then it flagged Spotify: the student plan is $6.99 vs $12.99, about 72 bucks a year." |
-| 26-33 s | Screen recording: the student replies "1" and the cart fills in Cubbie's browser. Stop before checkout. **Fallback** if Walmart.com shows a bot check: show Stretch's shopping-list reply instead. | "You just tap pay." (fallback: "List's ready. You just shop.") | "I reply 1, and the cart fills itself. I still pay." |
+| 26-33 s | Screen recording: the student replies "1" and the cart fills in Cubbie's browser. Stop before checkout. **Fallback** if Target.com shows a robot check, a sign-in that will not work or a page that will not load: show Stretch's shopping-list reply instead. | "You just tap pay." (fallback: "List's ready. You just shop.") | "I reply 1, and the cart fills itself. I still pay." |
 | 33-40 s | Quick cuts, about 3 s each: (a) the gear reply ("is a rice cooker worth it", with its payback line); (b) the subscription audit's top 3 list. | "Every Sunday. 2 minutes." | "Kitchen gear that pays for itself. Subscriptions you forgot about. Every Sunday, two minutes." |
 | 40-45 s | End card (see section 6). | End card text | "Stretch. Text the link to Cubbie." |
 
@@ -38,7 +38,7 @@ Before recording:
 While recording:
 9. Start the screen recording, wait 1 second, send the text, let the full reply arrive, wait 2 seconds, then stop.
 10. Do one take per text in section 3. Re-record any take where Cubbie's reply is wrong or too long. Do not edit Cubbie's words.
-11. For the cart take: stop recording before any sign-in, address or payment screen. Nobody pays on camera.
+11. For the cart take: stop recording before any sign-in, address or payment screen. Nobody pays on camera. The Target.com cart has not been tested in Cubbie's browser, so run it once off camera first; if it is blocked, record the shopping-list fallback.
 12. Hook shot (0-3 s): film [ON-CAMERA PERSON] (a real person, never an AI avatar) and a real fridge or dorm, vertical, in good light. Nothing generated.
 
 After recording:
@@ -52,7 +52,7 @@ Setup (off camera, made-up student):
 1. `https://github.com/SpencerRichOG/stretch`
 2. `yes` (lets Cubbie fetch and install the Skill)
 3. In a new message: `set up Stretch`
-4. Answer setup questions with the made-up profile: ASU Tempe, dorm, ZIP 85281, no car, ALDI, Target, Fry's and Safeway (the stores with real weekly-ad prices near ASU; cart site Walmart.com), kitchen `microwave, stove, pan and pot`, no diet limits, weekly food budget $41, Sunday check-in at 6 pm Arizona time.
+4. Answer setup questions with the made-up profile: ASU Tempe, dorm, ZIP 85281, no car, ALDI, Target, Fry's and Safeway (the stores with real weekly-ad prices near ASU; cart site Target.com pickup), kitchen `microwave, stove, pan and pot`, no diet limits, weekly food budget $41, Sunday check-in at 6 pm Arizona time.
 5. When asked to connect Gmail: `no thanks, I'll type them`, then `Spotify Premium $12.99 a month, an AI chatbot plan $20 a month, and a gym near campus $30 a month`
 
 Takes (on camera, each in a new message):

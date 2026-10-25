@@ -32,6 +32,8 @@ Mention these as places to look, with no promised prices: move-out sales at the 
 
 ## The message
 
+Example only; always use the numbers from payback.py's output:
+
 ```text
 Cheapest way to start cooking:
 1. Pan, about $12. You can't cook on the stove without one, and it opens up 4 more meals.

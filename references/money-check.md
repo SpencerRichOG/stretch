@@ -30,7 +30,7 @@ Short plain text, like a friend texting. Lead with the number that matters. Then
 - Say the totals cover only receipts Stretch saw.
 - End with the choices, for example "Reply 1 add freezer meals to Sunday's plan, 2 check my subscriptions, 3 skip."
 
-Example reply (numbers from the sample data):
+Example reply (numbers from the sample data; always use the numbers from tally.py's output):
 
 ```text
 October: about $347 across 16 receipts I could see.

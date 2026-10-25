@@ -40,7 +40,8 @@ Rules that never bend: no bank logins, no moving money, the student approves and
 ## Known risks
 
 - Flipp's search is unofficial and could change; exit 5 sends Cubbie to Tier 2 for every item.
-- Walmart: almost no weekly-ad data near 85281, shelf pages show a robot check, and Walmart.com may show a bot check when Cubbie builds the cart (fallback: a plain shopping list).
+- Walmart: almost no weekly-ad data near 85281 and shelf pages show a robot check, so the default cart site is Target.com (pickup or same-day delivery). Walmart.com and Instacart stay as options the student can choose.
+- Target.com cart: UNVERIFIED in Cubbie's browser; only Target's search page was checked, by a plain fetch on 2026-10-24. Fallback after one try: a plain shopping list. When deals came from ALDI, Fry's or Safeway, the Target cart total can differ from the plan, and the cart text says so.
 - Ad matching can still be wrong; merge_prices.py drops prices far from typical, but not every misread.
 - DashPass is not promised (DoorDash's pages disagree, no ASU, sign-up window ended 2026-10-12). ASU dorm appliance bans limit gear advice.
 - Recipe prices that come from typical prices are estimates, not live quotes.
@@ -49,6 +50,7 @@ Rules that never bend: no bank logins, no moving money, the student approves and
 ## What is unproven
 
 - No script has run from a real Cubbie sandbox; Tier 2 (shelf pages in Cubbie's browser) and Tier 3 (student photos) are untested on a real Cubbie.
+- The Target.com cart fill is untested in Cubbie's browser.
 - Store sites were checked by a plain fetch from a dev computer, not Cubbie's browser; Aldi and Sprouts shelf pages are unverified.
 - Amazon Prime Student and Sun Devil Sync numbers are not verified.
 - Not tested at other schools or stores.

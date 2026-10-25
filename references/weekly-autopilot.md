@@ -26,6 +26,8 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 
 ## deals.json
 
+Example only, made-up numbers; always use the numbers from the script output (fetch_deals.py writes this file):
+
 ```json
 {
   "deals": [
@@ -47,6 +49,8 @@ A scheduled check-in, run as a background task, that ends in one message. It als
 
 Cubbie writes this file only from prices it saw on a store's page (kind "shelf") or that the student sent (kind "student").
 
+Example only, not a current price; write only prices you saw on the page or the student sent:
+
 ```json
 {"prices": [
   {"store": "Target", "item": "eggs", "price": 1.49, "size": 12, "unit": "each", "seen_on": "2026-10-24",
@@ -61,7 +65,7 @@ Cubbie writes this file only from prices it saw on a store's page (kind "shelf")
 
 ## The message
 
-One message, plain text, lead with the total:
+One message, plain text, lead with the total. Example only, made-up numbers; always use the numbers from the script output:
 
 ```text
 This week's plan: $23.40 of your $41.
@@ -73,7 +77,7 @@ Reply 1 build cart, 2 edit, 3 skip.
 
 - Include the swap idea only if the script returned one.
 - Mention the delivery comparison only if the student has a delivery habit, and only as one short line.
-- Add one short line on where prices came from, taken from the plan's "Real prices" line, for example "9 of 12 prices are real (store ads, store sites or your photo); 3 are estimates." If a store blocked the lookup, add half a line: "Walmart's site blocked me; its items are estimates until you send a price."
+- Add one short line on where prices came from, taken from the plan's "Real prices" line, for example (made-up counts) "9 of 12 prices are real (store ads, store sites or your photo); 3 are estimates." If a store blocked the lookup, add half a line: "Walmart's site blocked me; its items are estimates until you send a price."
 - The full shopping list is not in the first message. Send it when the student replies 2 or asks for it, as plain lines.
 
 ## Replies
@@ -88,17 +92,17 @@ Only when the student has a delivery habit. Compare one typical order with the p
 
 - Prices come from the student, who types or screenshots the restaurant's menu price and the fees shown before checkout, or from the restaurant's public menu page on DoorDash or Uber Eats, opened once in the browser without signing in.
 - If the site asks for an address or sign-in, or shows a robot check, stop and ask the student for a screenshot instead.
-- Label it "menu price plus fees as shown, about", for example "That $14 bowl was about $21 with fees; tonight's home meal is about $1.70."
+- Label it "menu price plus fees as shown, about", for example (made-up numbers) "That $14 bowl was about $21 with fees; tonight's home meal is about $1.70."
 - Never place an order, never start a membership or trial, and never sign in for the student.
 
 ## Building the cart
 
-Use the cart site the student saved (default Walmart.com, with pickup or delivery; Instacart and DoorDash are options for students elsewhere). Do this only after the student replies 1.
+Use the cart site the student saved (default Target.com, with pickup or same-day delivery; Walmart.com and Instacart are options the student can choose, and DoorDash is one for students elsewhere). Do this only after the student replies 1.
 
 1. Open the site in the browser. If the student is not signed in, ask them to sign in through a secure login page or by taking over the browser. This is the only sign-in Stretch needs.
 2. Search each item on the shopping list and add the closest match in the right size at the lowest price. If an item is out of stock, pick the nearest substitute and tell the student, or leave it out and say so.
 3. Do not start any free trial or paid membership the site offers, and do not choose a delivery or pickup slot the student has not picked.
-4. Show the cart in one text: item count, the site's total, and how it compares to the plan. Prices at checkout can differ from the ad, so say so in half a line.
+4. Show the cart in one text: item count, the site's total, and how it compares to the plan. Prices at checkout can differ from the ad, so say so in half a line. If any plan price came from a store other than the cart site (for example a Fry's or ALDI ad with a Target cart), say so in one short line, for example "The Fry's and ALDI deals aren't in this Target cart, so the total can differ from the plan's ad prices."
 5. Hand the browser to the student and tell them to review and pay. Never pay, never enter payment details, never accept terms for them.
 
 If the site blocks you (a robot check, a login that will not work, a page that will not load), stop after one try. Do not keep retrying. Send the shopping list as plain lines, say which part was blocked, and let the student shop from the list.
