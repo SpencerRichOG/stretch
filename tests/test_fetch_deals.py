@@ -60,5 +60,32 @@ class OtherRules(unittest.TestCase):
         self.assertEqual(rows, [])
 
 
+class PrintedLines(unittest.TestCase):
+    def row(self, store, ad_text, condition=None):
+        d = {"store": store, "item": "chicken thighs", "price": 0.99, "size": 1.0, "unit": "lb",
+             "valid_until": "2026-10-27", "ad_text": ad_text}
+        if condition:
+            d["condition"] = condition
+        return d
+
+    def test_drumsticks_label(self):
+        self.assertEqual(f.deal_line(self.row("ALDI", "Fresh Family Pack Chicken Drumsticks")),
+                         "- chicken, drumsticks: $0.99 for 1 lb at ALDI, ends 2026-10-27")
+
+    def test_mixed_cuts_label(self):
+        d = self.row("Fry's Food Stores", "Fresh Foster Farms Whole Chicken, Drumsticks or Thighs", "lb with card")
+        self.assertEqual(f.deal_line(d), "- chicken, drumsticks or thighs: $0.99 for 1 lb at Fry's Food Stores "
+                                         "(lb with card), ends 2026-10-27")
+
+    def test_thighs_and_no_ad_text_keep_the_name(self):
+        self.assertEqual(f.deal_line(self.row("Wild Fork", "Chicken Thighs 5 LB Bag")),
+                         "- chicken thighs: $0.99 for 1 lb at Wild Fork, ends 2026-10-27")
+        self.assertTrue(f.deal_line(self.row("ALDI", None)).startswith("- chicken thighs: "))
+
+    def test_same_helper_as_plan_meals(self):
+        import plan_meals
+        self.assertIs(f.ad_label, plan_meals.ad_label)
+
+
 if __name__ == "__main__":
     unittest.main()

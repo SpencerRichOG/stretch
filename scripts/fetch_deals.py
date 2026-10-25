@@ -26,7 +26,7 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from stretchlib import ASSETS, StretchError, convert, fail, load_json
+from stretchlib import ASSETS, StretchError, ad_label, convert, fail, load_json
 
 SEARCH_URL = "https://backflipp.wishabi.com/flipp/items/search"
 SAMPLE_FILE = ASSETS / "sample_flipp.json"
@@ -235,6 +235,14 @@ def deals_from_items(item_name, raw_items, wanted_stores, today, offset_hours, t
     return [row for _, row in sorted(best.values(), key=lambda t: t[0])]
 
 
+def deal_line(d):
+    """One printed DEALS line, naming what the ad is for when it differs from the library item ("chicken, drumsticks")."""
+    cond = f" ({d['condition']})" if d.get("condition") else ""
+    ends = f", ends {d['valid_until']}" if d.get("valid_until") else ""
+    return (f"- {ad_label(d['item'], d.get('ad_text'))}: ${d['price']:.2f} for {d['size']:g} {d['unit']} "
+            f"at {d['store']}{cond}{ends}")
+
+
 def fetch_item(query, zip_code, timeout):
     params = urllib.parse.urlencode({"locale": "en-us", "postal_code": zip_code, "q": query})
     req = urllib.request.Request(f"{SEARCH_URL}?{params}", headers={
@@ -320,9 +328,7 @@ def main():
     print(f"DEALS: {len(deals)} real ad prices for {len({d['item'] for d in deals})} of {len(items)} items"
           + (f" from {', '.join(stores)}." if stores else "."))
     for d in deals[:25]:
-        cond = f" ({d['condition']})" if d.get("condition") else ""
-        ends = f", ends {d['valid_until']}" if d.get("valid_until") else ""
-        print(f"- {d['item']}: ${d['price']:.2f} for {d['size']:g} {d['unit']} at {d['store']}{cond}{ends}")
+        print(deal_line(d))
     for w in wanted:
         if any(store_match(d["store"], [w]) for d in deals):
             continue

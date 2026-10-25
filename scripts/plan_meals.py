@@ -20,7 +20,7 @@ from collections import defaultdict
 from datetime import date, timedelta
 from itertools import combinations, combinations_with_replacement
 
-from stretchlib import (ASSETS, StretchError, convert, fail, feasible_recipes, load_json)
+from stretchlib import (ASSETS, StretchError, ad_label, convert, fail, feasible_recipes, load_json)
 
 SAMPLE_TODAY = "2026-10-25"
 FAMILY_REPEAT_PENALTY = 2.00  # dollars of "cost" charged per repeated recipe family (keeps the week varied)
@@ -35,24 +35,6 @@ def terms(d):
     if any(w in text for w in ("card", "member", "rewards")):
         return "with card"
     return None
-
-
-# Library items an ad may stand in for with a different cut: (word in the ad, plural label). A label is
-# needed unless the ad names only cuts in OK_ALONE, so a drumstick ad is never shown as thighs.
-CUTS = {"chicken thighs": ("chicken", [("drumstick", "drumsticks"), ("thigh", "thighs"), ("leg quarter", "leg quarters")],
-                           {"thigh", "leg quarter"})}
-
-
-def ad_label(item, ad_text):
-    """What the ad is actually for ("chicken, drumsticks or thighs"), or the library item's own name."""
-    if item not in CUTS or not ad_text:
-        return item
-    base, cuts, ok_alone = CUTS[item]
-    text = str(ad_text).lower()
-    found = sorted((text.find(word), word, label) for word, label in cuts if word in text)
-    if not found or {word for _, word, _ in found} <= ok_alone:
-        return item
-    return f"{base}, " + " or ".join(label for _, _, label in found)
 
 
 def parse_day(text, label):

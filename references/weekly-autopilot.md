@@ -65,7 +65,7 @@ One message, plain text, lead with the total:
 
 ```text
 This week's plan: $23.40 of your $41.
-Deals: chicken thighs $1.99/lb, rice $2, eggs $2.49 (Fry's, ends Tue).
+Deals: chicken drumsticks or thighs $1.99/lb, rice $2, eggs $2.49 (Fry's, ends Tue).
 Sun: fried rice + rice and beans. Wed: chicken rice bowls.
 Swap idea: frozen veggies instead of fresh saves a little.
 Reply 1 build cart, 2 edit, 3 skip.
