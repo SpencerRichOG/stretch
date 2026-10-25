@@ -55,6 +55,33 @@ def library_index(typical):
     return index
 
 
+def off_typical(item, price, size, unit, amount, typical):
+    """A reason to drop a price far from typical (probably a misread size), or None if it looks sane."""
+    info = typical["items"][item]
+    ratio = (price / amount) / (float(info["pack_price"]) / float(info["pack"]))
+    if ratio < LOW or ratio > HIGH:
+        return f"${price:.2f} for {size:g} {unit} is {ratio:.0%} of the typical price; probably a misread size"
+    return None
+
+
+def check_ad_row(d, index, typical):
+    """A reason to drop an ad row whose price is far from typical, or None. Rows it cannot read pass through
+    unchanged, so plan_meals.py reports them as it always has."""
+    item = index.get(str(d.get("item", "")).strip().lower())
+    if item is None:
+        return None
+    try:
+        price = float(d["price"])
+        size = float(d.get("size", 1))
+        unit = str(d.get("unit") or typical["items"][item]["unit"])
+        amount = convert(size, unit, typical["items"][item]["unit"])
+    except (KeyError, TypeError, ValueError, StretchError):
+        return None
+    if price <= 0 or amount <= 0:
+        return None
+    return off_typical(item, price, size, unit, amount, typical)
+
+
 def check_row(row, index, typical, today):
     """(deal, None) for a good row, or (None, reason) for one to drop. Never guesses a missing value."""
     if not isinstance(row, dict):
@@ -93,9 +120,9 @@ def check_row(row, index, typical, today):
         return None, f"seen_on {seen} is after today"
     if (today - seen).days > MAX_AGE_DAYS:
         return None, f"seen on {seen}, more than {MAX_AGE_DAYS} days ago"
-    ratio = (price / amount) / (float(info["pack_price"]) / float(info["pack"]))
-    if ratio < LOW or ratio > HIGH:
-        return None, f"${price:.2f} for {size:g} {unit} is {ratio:.0%} of the typical price; probably a misread size"
+    why = off_typical(item, price, size, unit, amount, typical)
+    if why:
+        return None, why
     deal = {"store": store, "item": item, "price": round(price, 2), "size": size, "unit": unit,
             "valid_until": (seen + timedelta(days=VALID_DAYS)).isoformat(), "source": kind, "seen_on": seen.isoformat()}
     url = str(row.get("url") or "").strip()
@@ -158,15 +185,20 @@ def main():
         return
 
     index = library_index(typical)
-    merged = []
-    for d in ad_rows:
+    merged, dropped = [], []
+    for i, d in enumerate(ad_rows, 1):
         if not isinstance(d, dict):
             continue
         if str(d.get("source") or "").lower() in KINDS:
             continue  # from an earlier merge; shelf_prices.json is the full list, so a rerun never doubles them
+        why = check_ad_row(d, index, typical)
+        if why:
+            dropped.append(f"DROPPED ad row {i} ({d.get('store') or '?'}, {d.get('item') or '?'}): {why}")
+            continue
         merged.append(dict(d, source="ad"))
     ad_count = len(merged)
-    kept, dropped = [], []
+    ad_dropped = len(dropped)
+    kept = []
     for i, row in enumerate(shelf_rows, 1):
         deal, why = check_row(row, index, typical, today)
         if deal:
@@ -184,8 +216,8 @@ def main():
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(doc, indent=2), encoding="utf-8")
 
-    print(f"MERGED: {len(kept)} shelf or student prices kept, {len(dropped)} dropped; "
-          f"{ad_count} ad prices kept from deals.json.")
+    print(f"MERGED: {len(kept)} shelf or student prices kept, {len(dropped) - ad_dropped} dropped; "
+          f"{ad_count} ad prices kept from deals.json, {ad_dropped} dropped.")
     for d in kept[:MAX_LINES]:
         extra = ", ".join(x for x in (f"seen {d['seen_on']}", d.get("note")) if x)
         print(f"- {d['item']}: ${d['price']:.2f} for {d['size']:g} {d['unit']} at {d['store']} "
