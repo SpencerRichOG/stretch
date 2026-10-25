@@ -27,6 +27,16 @@ FAMILY_REPEAT_PENALTY = 2.00  # dollars of "cost" charged per repeated recipe fa
 SOURCE_LABELS = {"ad": "ad deal", "shelf": "shelf price", "student": "student price", "estimate": "estimate"}
 
 
+def terms(d):
+    """'with coupon' or 'with card' when the price needs one (from fetch_deals' condition or a shelf note), else None."""
+    text = f"{d.get('condition') or ''} {d.get('note') or ''}".lower()
+    if "coupon" in text:
+        return "with coupon"
+    if any(w in text for w in ("card", "member", "rewards")):
+        return "with card"
+    return None
+
+
 def parse_day(text, label):
     try:
         return date.fromisoformat(str(text))
@@ -46,7 +56,7 @@ def build_price_book(typical, deals, today):
         pack = float(info["pack"])
         book[name] = {
             "unit": info["unit"], "pack": pack, "unit_price": float(info["pack_price"]) / pack,
-            "loose": bool(info.get("loose", False)), "source": "estimate", "store": None,
+            "loose": bool(info.get("loose", False)), "source": "estimate", "store": None, "terms": None,
         }
     notes = []
     for d in deals:
@@ -79,7 +89,7 @@ def build_price_book(typical, deals, today):
             continue  # keep the cheaper deal
         loose = bool(d.get("loose", current["loose"]))
         book[name] = {"unit": base_unit, "pack": pack_in_base, "unit_price": unit_price, "loose": loose,
-                      "source": source, "store": d.get("store")}
+                      "source": source, "store": d.get("store"), "terms": terms(d)}
     return book, notes
 
 
@@ -170,7 +180,8 @@ def build_result(profile, deals, today, recipes_doc, typical, exclude=frozenset(
         buy, packs, c = line_cost(book[item], need[item])
         entry = book[item]
         shopping.append({"item": item, "buy": round(buy, 3), "unit": entry["unit"], "packs": packs,
-                         "cost": round(c, 2), "source": entry["source"], "store": entry["store"]})
+                         "cost": round(c, 2), "source": entry["source"], "store": entry["store"],
+                         "terms": entry["terms"]})
         (estimated if entry["source"] == "estimate" else from_deals).append(item)
     sources = {k: sum(1 for s in shopping if s["source"] == k) for k in ("ad", "shelf", "student", "estimate")}
     for rid in combo:
@@ -218,6 +229,8 @@ def render_text(r):
     for it in r["shopping_list"]:
         label = SOURCE_LABELS[it["source"]]
         where = f"{label} at {it['store']}" if it["store"] and it["source"] != "estimate" else label
+        if it["terms"] and it["source"] != "estimate":
+            where += f", {it['terms']}"
         lines.append(f"- {qty_text(it['buy'], it['unit'])} {it['item']}: {money(it['cost'])} ({where})")
     ps = r["price_sources"]
     lines.append(f"Real prices: {len(r['shopping_list']) - ps['estimate']} of {len(r['shopping_list'])} lines "
