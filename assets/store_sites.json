@@ -1,7 +1,8 @@
 {
-  "_note": "How Cubbie finds a store's public shelf price (Tier 2). Checked 2026-10-24 by one plain fetch per site from a dev machine, not from Cubbie's browser; 'checked' records only what that fetch saw. No API keys, tokens or private endpoints. One try per store; a robot check, sign-in wall or sign-in location prompt means: mark the store blocked and move on.",
+  "_note": "How Cubbie finds a store's public shelf price (Tier 2). Checked 2026-10-24 by one plain fetch per site from a dev machine, not from Cubbie's browser; 'checked' records only what that fetch saw. No API keys, tokens or private endpoints. 'status' is blocked, loaded or unverified (blocked: one try in Cubbie's browser, then Tier 3). One try per store; a robot check, sign-in wall or sign-in location prompt means: mark the store blocked and move on.",
   "stores": {
     "Aldi": {
+      "status": "unverified",
       "site": "https://www.aldi.us",
       "search": "search the web for \"aldi.us <item>\"; product pages look like https://www.aldi.us/product/<name>-<id>",
       "pick_store": "unverified",
@@ -9,13 +10,15 @@
       "checked": "2026-10-24: https://www.aldi.us/results?q=eggs gave 404; a product page fetch returned an empty template (page builds with JavaScript). unverified"
     },
     "Walmart": {
+      "status": "blocked",
       "site": "https://www.walmart.com",
       "search": "https://www.walmart.com/search?q=<item>",
       "pick_store": "unverified",
       "quirks": "unverified",
-      "checked": "2026-10-24: robot check (\"Robot or human?\"). A plain fetch from a dev computer was blocked or timed out on 2026-10-24; Cubbie's browser may differ, so still try once, and stop at the first robot check or sign-in wall."
+      "checked": "2026-10-24: robot check (\"Robot or human?\"). Status: blocked on plain fetch 2026-10-24; try once in Cubbie's browser, stop at the first robot check, then go straight to the student's price-tag photo (Tier 3)."
     },
     "Target": {
+      "status": "loaded",
       "site": "https://www.target.com",
       "search": "https://www.target.com/s?searchTerm=<item>",
       "pick_store": "Page shows Pickup, Same-day Delivery, Shipping and Shop in store filters; no ZIP prompt was shown. Store choice otherwise unverified.",
@@ -23,20 +26,23 @@
       "checked": "2026-10-24: loaded, 228 results for eggs, no robot check."
     },
     "Fry's": {
+      "status": "blocked",
       "site": "https://www.frysfood.com",
       "search": "https://www.frysfood.com/search?query=<item> (unverified)",
       "pick_store": "unverified",
       "quirks": "Fry's (a Kroger store) ads often need the Fry's card or a digital coupon; fetch_deals.py already marks those. Shelf page quirks unverified.",
-      "checked": "2026-10-24: timed out after 60 s. A plain fetch from a dev computer was blocked or timed out on 2026-10-24; Cubbie's browser may differ, so still try once, and stop at the first robot check or sign-in wall."
+      "checked": "2026-10-24: timed out after 60 s. Status: blocked on plain fetch 2026-10-24; try once in Cubbie's browser, stop at the first robot check, then go straight to the student's price-tag photo (Tier 3)."
     },
     "CVS": {
+      "status": "blocked",
       "site": "https://www.cvs.com",
       "search": "https://www.cvs.com/search?searchTerm=<item> (unverified)",
       "pick_store": "unverified",
       "quirks": "unverified",
-      "checked": "2026-10-24: HTTP 403. A plain fetch from a dev computer was blocked or timed out on 2026-10-24; Cubbie's browser may differ, so still try once, and stop at the first robot check or sign-in wall."
+      "checked": "2026-10-24: HTTP 403. Status: blocked on plain fetch 2026-10-24; try once in Cubbie's browser, stop at the first robot check, then go straight to the student's price-tag photo (Tier 3)."
     },
     "Sprouts": {
+      "status": "unverified",
       "site": "https://shop.sprouts.com",
       "search": "https://shop.sprouts.com/search?search_term=<item>",
       "pick_store": "Page links to Pickup and Delivery; no ZIP prompt shown. Otherwise unverified.",
@@ -44,11 +50,12 @@
       "checked": "2026-10-24: page loaded, no products in the plain read, no robot check."
     },
     "Safeway": {
+      "status": "blocked",
       "site": "https://www.safeway.com",
       "search": "https://www.safeway.com/shop/search-results.html?q=<item>",
       "pick_store": "unverified",
       "quirks": "Ad prices often need a coupon (fetch_deals.py marks them). Shelf page quirks unverified.",
-      "checked": "2026-10-24: robot check (\"Pardon Our Interruption\"). A plain fetch from a dev computer was blocked or timed out on 2026-10-24; Cubbie's browser may differ, so still try once, and stop at the first robot check or sign-in wall."
+      "checked": "2026-10-24: robot check (\"Pardon Our Interruption\"). Status: blocked on plain fetch 2026-10-24; try once in Cubbie's browser, stop at the first robot check, then go straight to the student's price-tag photo (Tier 3)."
     },
     "generic": {
       "site": "the store's own website",
